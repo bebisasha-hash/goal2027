@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Год, который изменит всё</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg: #050814;
+      --card: #111827;
+      --accent1: #38bdf8;
+      --accent2: #a855f7;
+      --accent3: #22c55e;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --radius-lg: 18px;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+    }
+    body {
+      background: radial-gradient(circle at top left, #1e293b 0, #020617 55%);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      text-align: center;
+      margin-top: 20px; margin-bottom: 4px;
+    }
+    header h1 {
+      font-size: 1.9rem;
+      font-weight: 700;
+    }
+    .countdown-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background:
+    radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(88,28,135,0.35), rgba(15,23,42,0.95));
+  box-shadow: 0 12px 32px rgba(15,23,42,0.9);
+  font-size: 0.83rem;
+  color: var(--text-main);
+
+  width: 360px;
+  height: 36px;
+  white-space: nowrap;
+}
+    #countdown-remaining {
+      color: var(--text-muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 4px;
+      margin-top: 4px;
+    }
+    @media (min-width: 700px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (min-width: 1024px) {
+      body {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, #1f2937 0, #020617 70%);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 14px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.8);
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.18s ease;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0 0, rgba(56,189,248,.15), transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(168,85,247,.12), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+    .card-inner {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      height: 100%;
+    }
+    /* Hover только для обычных карточек, не общего прогресса */
+    .card:not(.card-total):hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.9);
+      border-color: rgba(148, 163, 184, 0.4);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .progress-circle {
+      width: 110px;
+      height: 110px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .progress-circle svg {
+      transform: rotate(-90deg);
+    }
+    .bg-circle {
+      stroke: rgba(31, 41, 55, 0.9);
+    }
+    .fg-circle {
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.4s ease-out, stroke 0.4s ease-out;
+    }
+    .center-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .progress-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.9rem;
+    }
+    .progress-main {
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+    .progress-sub {
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+    .bar-wrap {
+      width: 100%;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.95);
+      overflow: hidden;
+      margin-top: 2px;
+    }
+    .bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background-color: rgba(148, 163, 184, 0.55);
+      transition: width 0.4s ease-out, background-color 0.3s ease-out;
+    }
+    .input-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .input-row label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      flex-basis: 100%;
+    }
+    .input-row input[type="number"],
+    .input-row input[type="text"] {
+      flex: 1;
+      min-width: 90px;
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 6px 10px;
+      color: var(--text-main);
+      font-size: 0.8rem;
+      outline: none;
+    }
+    .input-row input::placeholder {
+      color: rgba(148, 163, 184, 0.7);
+    }
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    button {
+      background: linear-gradient(135deg, #38bdf8, #8b5cf6);
+      border: none;
+      color: white;
+      font-size: 0.8rem;
+      padding: 7px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.1s ease-out, box-shadow 0.1s ease-out,
+        filter 0.15s ease-out;
+      box-shadow: 0 8px 22px rgba(56, 189, 248, 0.4);
+      white-space: nowrap;
+    }
+    button.secondary {
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-main);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: none;
+    }
+    button:active {
+      transform: scale(0.97) translateY(1px);
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.9);
+      filter: brightness(0.98);
+    }
+    .btn-minus {
+      background: linear-gradient(135deg, #0f172a, #1f2937);
+      color: var(--text-main);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.85);
+    }
+
+    .card-total {
+      border-width: 2px;
+      border-color: rgba(56,189,248,0.7);
+      box-shadow: 0 18px 45px rgba(56,189,248,0.3);
+      background:
+        radial-gradient(circle at top, rgba(56,189,248,0.2), transparent 55%),
+        radial-gradient(circle at bottom, rgba(88,28,135,0.25), #020617 75%);
+      transition: border-color 0.4s ease, box-shadow 0.4s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-total .card-inner {
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    .card-total .progress-wrap {
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-total .progress-circle {
+      width: 150px;
+      height: 150px;
+    }
+    .card-total .center-text {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+    .card-total .progress-details {
+      align-items: center;
+      text-align: center;
+    }
+
+    .deadline-plain {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Год, который изменит всё</h1>
+    <div class="countdown-box">
+      <span id="countdown-remaining"></span>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- Психолог -->
+    <div class="card" data-goal="therapy">
+      <div class="card-inner">
+        <div class="card-header">
+          <div class="card-title">Психолог</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-circle">
+            <svg viewBox="0 0 120 120">
+              <circle class="bg-circle" cx="60" cy="60" r="50" stroke-width="10" fill="none"></circle>
+              <circle class="fg-circle" cx="60" cy="60" r="50" stroke-width="10" fill="none"></circle>
+            </svg>
+            <div class="center-text">0%</div>
+          </div>
+          <div class="progress-details">
+            <div class="progress-main js-text-main"></div>
+            <div class="progress-sub js-text-sub"></div>
+            <div class="bar-wrap">
+              <div class="bar-fill"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <label>Добавить сеанс</label>
+          <input type="number" step="1" min="0" placeholder="+1" class="js-input">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn-minus js-minus">-</button>
+          <button type="button" data-add="1">+</button>
+          <button type="button" class="secondary js-set">Всего</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Книги -->
+    <div class="card" data-goal="books">
+      <div class="card-inner">
+        <div class="card-header">
+          <div class="card-title">Книги</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-circle">
+            <svg viewBox="0 0 120 120">
+              <circle class="bg-circle" cx="60" cy="60" r="50" stroke-width="10" fill="none"></circle>
+              <circle class="fg-circle" cx="60" cy="60" r="50" stroke-width="10" fill="none"></circle>
+            </svg>
+            <div class="center-text">0%</div>
+          </div>
+          <div class="progress-details">
+            <div class="progress-main js-text-main"></div>
+            <div class="progress-sub js-text-sub"></div>
+            <div class="bar-wrap">
+              <div class="bar-fill"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <label>Добавить книги</label>
+          <input type="number" step="1" min="0" placeholder="+1" class="js-input">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn-minus js-minus">-</button>
+          <button type="button" data-add="1">+</button>
+          <button type="button" class="secondary js-set">Всего</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Часы работы -->
+    <div class="card" data-goal="hours">
+      <div class="card-inner">
+        <div class="card-header">
+          <div class="card-title">Часы работы</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-circle">
+            <svg viewBox="0 0 120 120">
+              <circle class="bg-circle" cx="60" cy="60" r="50" stroke-width="10" fill="none"></circle>
+              <circle class="fg-circle" cx="60" cy="60" r="50" stroke-width="10" fill="none"></circle>
+            </svg>
+            <div class="center-text">0%</div>
+          </div>
+          <div class="progress-details">
+            <div class="progress-main js-text-main"></div>
+            <div class="progress-sub js-text-sub"></div>
+            <div class="bar-wrap">
+              <div class="bar-fill"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <label>Добавить часы</label>
+          <input type="number" step="0.5" min="0" placeholder="+1" class="js-input">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn-minus js-minus">-</button>
+          <button type="button" data-add="1">+</button>
+          <button type="button" class="secondary js-set">Всего</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Капитал -->
+    <div class="card" data-goal="capital">
+      <div class="card-inner">
+        <div class="card-header">
+          <div class="card-title">Капитал</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-circle">
+            <svg viewBox="0 0 120 120">
+              <circle class="bg-circle" cx="60" cy="60" r="50" stroke-width="10" fill="none"></circle>
+              <circle class="fg-circle" cx="60" cy="60" r="50" stroke-width="10" fill="none"></circle>
+            </svg>
+            <div class="center-text">0%</div>
+          </div>
+          <div class="progress-details">
+            <div class="progress-main js-text-main"></div>
+            <div class="progress-sub js-text-sub"></div>
+            <div class="bar-wrap">
+              <div class="bar-fill"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <label>Текущий капитал, $</label>
+          <input type="text" placeholder="Например 200,000" class="js-input-absolute">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="secondary js-set-absolute">Обновить сумму</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Фигура мечты -->
+    <div class="card" data-goal="weight">
+      <div class="card-inner">
+        <div class="card-header">
+          <div class="card-title">Фигура мечты</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-circle">
+            <svg viewBox="0 0 120 120">
+              <circle class="bg-circle" cx="60" cy="60" r="50" stroke-width="10" fill="none"></circle>
+              <circle class="fg-circle" cx="60" cy="60" r="50" stroke-width="10" fill="none"></circle>
+            </svg>
+            <div class="center-text">0%</div>
+          </div>
+          <div class="progress-details">
+            <div class="progress-main js-text-main"></div>
+            <div class="progress-sub js-text-sub"></div>
+            <div class="bar-wrap">
+              <div class="bar-fill"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <label>Сколько уже сброшено, кг</label>
+          <input type="number" step="0.1" min="0" placeholder="Например 1.5" class="js-weight-lost">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn-minus js-weight-minus">-</button>
+          <button type="button" class="js-weight-plus">+</button>
+          <button type="button" class="secondary js-weight-total">Всего</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Общий прогресс -->
+    <div class="card card-total" data-goal="total">
+      <div class="card-inner">
+        <div class="progress-wrap">
+          <div class="progress-circle">
+            <svg viewBox="0 0 120 120">
+              <circle class="bg-circle" cx="60" cy="60" r="50" stroke-width="10" fill="none"></circle>
+              <circle class="fg-circle" cx="60" cy="60" r="50" stroke-width="10" fill="none"></circle>
+            </svg>
+            <div class="center-text">0%</div>
+          </div>
+          <div class="progress-details">
+            <div class="progress-main js-text-main">Общий прогресс: 0%</div>
+            <div class="progress-sub js-text-sub">Средний процент по 5 целям</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="deadline-plain">Дедлайн: 1 января 2027 года</div>
+
+  <script>
+    const TARGETS = {
+      therapy: { target: 30, unit: "сеансов" },
+      books:   { target: 100, unit: "книг" },
+      hours:   { target: 3000, unit: "часов" },
+      capital: { target: 30000, unit: "$" },
+      weight:  { targetLoss: 13, unit: "кг", start: 73, targetWeight: 60 }
+    };
+    const STORAGE_KEY = "fiveGoals_2027_final_v16";
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return {};
+        return JSON.parse(raw);
+      } catch {
+        return {};
+      }
+    }
+    function saveState(state) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+    let state = loadState();
+    function ensureDefaults() {
+      if (!state.therapy) state.therapy = { current: 0 };
+      if (!state.books)   state.books   = { current: 0 };
+      if (!state.hours)   state.hours   = { current: 0 };
+      if (!state.capital) state.capital = { current: 0 };
+      if (!state.weight || typeof state.weight !== "object" || state.weight.lost == null) {
+        state.weight = { lost: 0 };
+      }
+    }
+    ensureDefaults();
+
+    function formatKg(value) {
+      const rounded = Math.round(value * 10) / 10;
+      if (Math.abs(rounded - Math.round(rounded)) < 1e-6) {
+        return String(Math.round(rounded));
+      }
+      return rounded.toFixed(1);
+    }
+
+    function formatNumberSmart(value) {
+      const rounded = Math.round(value * 10) / 10;
+      if (Math.abs(rounded - Math.round(rounded)) < 1e-6) {
+        return String(Math.round(rounded));
+      }
+      return rounded.toFixed(1);
+    }
+
+    function pluralRu(n, one, few, many) {
+      n = Math.abs(n) % 100;
+      const n1 = n % 10;
+      if (n > 10 && n < 20) return many;
+      if (n1 > 1 && n1 < 5) return few;
+      if (n1 === 1) return one;
+      return many;
+    }
+
+    function updateCountdown() {
+      const remainingEl = document.getElementById("countdown-remaining");
+      if (!remainingEl) return;
+      const now = new Date();
+      const end = new Date("2027-01-01T00:00:00");
+      let diff = end - now;
+
+      if (diff <= 0) {
+        remainingEl.textContent = "Срок наступил";
+        return;
+      }
+
+      const totalSeconds = Math.floor(diff / 1000);
+      const days = Math.floor(totalSeconds / (24 * 60 * 60));
+      const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
+      const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+      const seconds = totalSeconds % 60;
+
+      const dWord = pluralRu(days, "день", "дня", "дней");
+      const hWord = pluralRu(hours, "час", "часа", "часов");
+      const mWord = pluralRu(minutes, "минута", "минуты", "минут");
+      const sWord = pluralRu(seconds, "секунда", "секунды", "секунд");
+
+      remainingEl.textContent =
+        "Осталось: " +
+        days + " " + dWord + " " +
+        hours.toString().padStart(2, "0") + " " + hWord + " " +
+        minutes.toString().padStart(2, "0") + " " + mWord + " " +
+        seconds.toString().padStart(2, "0") + " " + sWord;
+    }
+
+    function getStrokeColor(pct) {
+      if (pct > 100) return "#16a34a";
+      if (pct >= 66) return "#22c55e";
+      if (pct >= 33) return "#8b5cf6";
+      return "#38bdf8";
+    }
+
+    function colorToShadow(color) {
+      switch (color) {
+        case "#16a34a": return "0 18px 45px rgba(22,163,74,0.35)";
+        case "#22c55e": return "0 18px 45px rgba(34,197,94,0.32)";
+        case "#8b5cf6": return "0 18px 45px rgba(139,92,246,0.32)";
+        case "#38bdf8":
+        default:        return "0 18px 45px rgba(56,189,248,0.30)";
+      }
+    }
+
+    function updateCircleAndBar(card, pct) {
+      const circle = card.querySelector(".fg-circle");
+      const centerTextEl = card.querySelector(".center-text");
+      const bar = card.querySelector(".bar-fill");
+      const radius = 50;
+      const circumference = 2 * Math.PI * radius;
+
+      const visualPct = Math.max(0, Math.min(pct, 100));
+      const offset = circumference * (1 - visualPct / 100);
+      circle.setAttribute("stroke-dasharray", circumference.toFixed(2));
+      circle.setAttribute("stroke-dashoffset", offset.toFixed(2));
+
+      const strokeColor = getStrokeColor(pct);
+      circle.setAttribute("stroke", strokeColor);
+      centerTextEl.textContent = Math.round(pct) + "%";
+      if (bar) {
+        bar.style.width = visualPct + "%";
+        bar.style.backgroundColor = strokeColor;
+      }
+      // ВАЖНО: здесь НЕ трогаем border/tеню карточки.
+      return strokeColor;
+    }
+
+    function updateGenericCard(goalId, showFraction) {
+      const card = document.querySelector('.card[data-goal="' + goalId + '"]');
+      if (!card) return;
+      const data = state[goalId];
+      const cfg = TARGETS[goalId];
+      const current = Number(data.current || 0);
+      const target  = cfg.target;
+      const pct  = target > 0 ? (current / target) * 100 : 0;
+
+      updateCircleAndBar(card, pct);
+
+      const mainText = card.querySelector(".js-text-main");
+      const subText  = card.querySelector(".js-text-sub");
+      mainText.textContent = current + " из " + target + " " + cfg.unit;
+      if (showFraction && goalId === "hours") {
+        const left = Math.max(0, target - current);
+        const leftText = formatNumberSmart(left);
+        subText.textContent = "Осталось " + leftText + " " + cfg.unit;
+      } else {
+        const left = Math.max(0, target - current);
+        subText.textContent = "Осталось " + left + " " + cfg.unit;
+      }
+    }
+
+    function updateCapitalCard() {
+      const goalId = "capital";
+      const card = document.querySelector('.card[data-goal="' + goalId + '"]');
+      const data = state[goalId];
+      const cfg = TARGETS[goalId];
+      const current = Number(data.current || 0);
+      const target  = cfg.target;
+      const pct  = target > 0 ? (current / target) * 100 : 0;
+
+      updateCircleAndBar(card, pct);
+
+      const mainText = card.querySelector(".js-text-main");
+      const subText  = card.querySelector(".js-text-sub");
+      mainText.textContent =
+        current.toLocaleString("en-US") + " из " + target.toLocaleString("en-US") + " $";
+      subText.textContent =
+        "Осталось " + Math.max(0, target - current).toLocaleString("en-US") + " $";
+
+      const inputAbs = card.querySelector(".js-input-absolute");
+      if (inputAbs) {
+        inputAbs.value = current ? current.toLocaleString("en-US") : "";
+      }
+    }
+
+    function updateWeightCard() {
+      const goalId = "weight";
+      const card = document.querySelector('.card[data-goal="' + goalId + '"]');
+      const data = state[goalId];
+      const cfg = TARGETS[goalId];
+      const lost = Number(data.lost || 0);
+      const targetLoss = cfg.targetLoss;
+      const pct = targetLoss > 0 ? (lost / targetLoss) * 100 : 0;
+
+      updateCircleAndBar(card, pct);
+
+      const mainText = card.querySelector(".js-text-main");
+      const subText  = card.querySelector(".js-text-sub");
+      const currentLostText = formatKg(lost);
+      const targetText = formatKg(targetLoss);
+      const remainingText = formatKg(Math.max(0, targetLoss - lost));
+      mainText.textContent = currentLostText + " кг из " + targetText + " кг";
+      subText.textContent =
+        "Осталось " + remainingText + " кг · Цель: " + cfg.targetWeight + " кг (старт: " + cfg.start + " кг)";
+      const inputLost = card.querySelector(".js-weight-lost");
+      if (inputLost) {
+        if (lost > 0) {
+          if (Math.abs(lost - Math.round(lost)) < 1e-6) {
+            inputLost.value = String(Math.round(lost));
+          } else {
+            inputLost.value = lost.toFixed(1);
+          }
+        } else {
+          inputLost.value = "";
+        }
+      }
+    }
+
+    function getGoalPercent(goalId) {
+      if (goalId === "weight") {
+        const data = state.weight;
+        const cfg = TARGETS.weight;
+        const lost = Number(data.lost || 0);
+        const targetLoss = cfg.targetLoss;
+        if (targetLoss <= 0) return 0;
+        return (lost / targetLoss) * 100;
+      }
+      if (goalId === "capital") {
+        const data = state.capital;
+        const cfg = TARGETS.capital;
+        const current = Number(data.current || 0);
+        const target = cfg.target;
+        if (target <= 0) return 0;
+        return (current / target) * 100;
+      }
+      const data = state[goalId];
+      const cfg = TARGETS[goalId];
+      const current = Number(data.current || 0);
+      const target = cfg.target;
+      if (target <= 0) return 0;
+      return (current / target) * 100;
+    }
+
+    function updateTotalCard() {
+      const card = document.querySelector('.card[data-goal="total"]');
+      if (!card) return;
+      const goals = ["therapy", "books", "hours", "capital", "weight"];
+      let sum = 0;
+      goals.forEach(function(g) {
+        sum += getGoalPercent(g);
+      });
+      const avg = sum / goals.length;
+      const color = updateCircleAndBar(card, avg);
+      const mainText = card.querySelector(".js-text-main");
+      const subText  = card.querySelector(".js-text-sub");
+      if (mainText) {
+        mainText.textContent = "Общий прогресс: " + Math.round(avg) + "%";
+      }
+      if (subText) {
+        subText.textContent = "Средний процент по 5 целям";
+      }
+      card.style.boxShadow = colorToShadow(color);
+      card.style.borderColor = color;
+    }
+
+    function updateUI() {
+      updateGenericCard("therapy");
+      updateGenericCard("books");
+      updateGenericCard("hours", true);
+      updateCapitalCard();
+      updateWeightCard();
+      updateTotalCard();
+    }
+
+    function parseCapitalInput(str) {
+      if (!str) return NaN;
+      const clean = String(str).replace(/\s+/g, "").replace(/,/g, "");
+      const num = Number(clean);
+      return num;
+    }
+
+    function setupInteractions() {
+      ["therapy", "books", "hours"].forEach(function(goalId) {
+        const card = document.querySelector('.card[data-goal="' + goalId + '"]');
+        const input = card.querySelector(".js-input");
+        const plusBtn = card.querySelector("button[data-add]");
+        const minusBtn = card.querySelector(".js-minus");
+        const setBtn = card.querySelector(".js-set");
+
+        plusBtn.addEventListener("click", function() {
+          const delta = Number(plusBtn.getAttribute("data-add") || "0");
+          const manual = Number(input.value || "0");
+          const effective = manual > 0 ? manual : delta;
+          state[goalId].current = Math.max(0, Number(state[goalId].current || 0) + effective);
+          input.value = "";
+          saveState(state);
+          updateGenericCard(goalId, goalId === "hours");
+          updateTotalCard();
+        });
+
+        minusBtn.addEventListener("click", function() {
+          const current = Number(state[goalId].current || 0);
+          const next = current - 1;
+          state[goalId].current = Math.max(0, next);
+          saveState(state);
+          updateGenericCard(goalId, goalId === "hours");
+          updateTotalCard();
+        });
+
+        setBtn.addEventListener("click", function() {
+          var value = window.prompt("Введи общее текущее значение:");
+          if (value === null) return;
+          var num = Number(String(value).replace(",", "."));
+          if (!isFinite(num) || num < 0) return;
+          state[goalId].current = num;
+          saveState(state);
+          updateGenericCard(goalId, goalId === "hours");
+          updateTotalCard();
+        });
+
+        input.addEventListener("keydown", function(e) {
+          if (e.key === "Enter") {
+            plusBtn.click();
+          }
+        });
+      });
+
+      (function() {
+        const goalId = "capital";
+        const card = document.querySelector('.card[data-goal="' + goalId + '"]');
+        const inputAbs = card.querySelector(".js-input-absolute");
+        const btnSetAbs = card.querySelector(".js-set-absolute");
+        btnSetAbs.addEventListener("click", function() {
+          const val = parseCapitalInput(inputAbs.value);
+          if (!isFinite(val) || val < 0) return;
+          state[goalId].current = val;
+          saveState(state);
+          updateCapitalCard();
+          updateTotalCard();
+        });
+        inputAbs.addEventListener("keydown", function(e) {
+          if (e.key === "Enter") {
+            btnSetAbs.click();
+          }
+        });
+      })();
+
+      (function() {
+        const goalId = "weight";
+        const card = document.querySelector('.card[data-goal="' + goalId + '"]');
+        const inputLost = card.querySelector(".js-weight-lost");
+        const btnPlus = card.querySelector(".js-weight-plus");
+        const btnMinus = card.querySelector(".js-weight-minus");
+        const btnTotal = card.querySelector(".js-weight-total");
+
+        if (state.weight && state.weight.lost != null && state.weight.lost > 0) {
+          const lost = Number(state.weight.lost);
+          if (Math.abs(lost - Math.round(lost)) < 1e-6) {
+            inputLost.value = String(Math.round(lost));
+          } else {
+            inputLost.value = lost.toFixed(1);
+          }
+        }
+
+        // Минус — уменьшает сброшенный вес (как набрать 1 кг)
+        btnMinus.addEventListener("click", function() {
+          const current = Number(state[goalId].lost || 0);
+          const next = current - 1;
+          state[goalId].lost = Math.max(0, next);
+          saveState(state);
+          updateWeightCard();
+          updateTotalCard();
+        });
+
+        // Плюс — увеличивает сброшенный вес (скинуть 1 кг)
+        btnPlus.addEventListener("click", function() {
+          const current = Number(state[goalId].lost || 0);
+          const next = current + 1;
+          state[goalId].lost = Math.max(0, next);
+          saveState(state);
+          updateWeightCard();
+          updateTotalCard();
+        });
+
+        btnTotal.addEventListener("click", function() {
+          const valRaw = inputLost.value;
+          if (!valRaw) return;
+          const num = Number(String(valRaw).replace(",", "."));
+          if (!isFinite(num) || num < 0) return;
+          state[goalId].lost = num;
+          saveState(state);
+          updateWeightCard();
+          updateTotalCard();
+        });
+
+        inputLost.addEventListener("keydown", function(e) {
+          if (e.key === "Enter") {
+            btnTotal.click();
+          }
+        });
+      })();
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+      setupInteractions();
+      updateUI();
+    });
+  </script>
+</body>
+</html>
