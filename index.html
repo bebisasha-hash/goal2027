@@ -49,7 +49,7 @@
       font-weight: 700;
     }
     .countdown-box {
-      width: 340px;
+      width: 320px;
       min-height: 40px;
       max-width: 100%;
       display: inline-flex;
@@ -62,8 +62,15 @@
         radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 55%),
         radial-gradient(circle at bottom right, rgba(88,28,135,0.35), #0f172a);
       box-shadow: 0 12px 32px rgba(15,23,42,0.9);
-      font-size: 0.80rem;
+      font-size: 0.86rem;
       color: var(--text-main);
+    
+  width: 340px;
+  font-size: 0.80rem;
+  white-space: nowrap;
+
+      width: 340px;
+      font-size: 0.80rem;
       white-space: nowrap;
     }
     #countdown-remaining {
@@ -111,11 +118,9 @@
         radial-gradient(circle at 100% 0, rgba(168,85,247,.12), transparent 55%);
       opacity: 0.9;
       pointer-events: none;
-      z-index: -1;
     }
     .card-inner {
       position: relative;
-      z-index: 1;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -208,7 +213,7 @@
       color: var(--text-muted);
       flex-basis: 100%;
     }
-    .input-row input[type="number"],
+    .input-row input[type="text" inputmode="decimal"],
     .input-row input[type="text"] {
       flex: 1;
       min-width: 90px;
@@ -338,7 +343,7 @@
 
         <div class="input-row">
           <label>Добавить сеанс</label>
-          <input type="number" step="1" min="0" placeholder="+1" class="js-input">
+          <input type="text" inputmode="decimal" step="1" min="0" placeholder="+1" class="js-input">
         </div>
         <div class="btn-row">
           <button type="button" class="btn-minus js-minus">-</button>
@@ -373,7 +378,7 @@
 
         <div class="input-row">
           <label>Добавить книги</label>
-          <input type="number" step="1" min="0" placeholder="+1" class="js-input">
+          <input type="text" inputmode="decimal" step="1" min="0" placeholder="+1" class="js-input">
         </div>
         <div class="btn-row">
           <button type="button" class="btn-minus js-minus">-</button>
@@ -408,7 +413,7 @@
 
         <div class="input-row">
           <label>Добавить часы</label>
-          <input type="number" step="0.5" min="0" placeholder="+1" class="js-input">
+          <input type="text" inputmode="decimal" step="0.5" min="0" placeholder="+1" class="js-input">
         </div>
         <div class="btn-row">
           <button type="button" class="btn-minus js-minus">-</button>
@@ -476,7 +481,7 @@
 
         <div class="input-row">
           <label>Сколько уже сброшено, кг</label>
-          <input type="number" step="0.1" min="0" placeholder="Например 1.5" class="js-weight-lost">
+          <input type="text" inputmode="decimal" step="0.1" min="0" placeholder="Например 1.5" class="js-weight-lost">
         </div>
         <div class="btn-row">
           <button type="button" class="btn-minus js-weight-minus">-</button>
