@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <title>Год, который изменит всё</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Sense">
+  <link rel="apple-touch-icon" href="icon.png">
+
   <style>
     :root {
       --bg: #050814;
@@ -44,23 +49,22 @@
       font-weight: 700;
     }
     .countdown-box {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 14px;
-  border-radius: var(--radius-lg);
-  border: 1px solid rgba(148, 163, 184, 0.6);
-  background:
-    radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 55%),
-    radial-gradient(circle at bottom right, rgba(88,28,135,0.35), rgba(15,23,42,0.95));
-  box-shadow: 0 12px 32px rgba(15,23,42,0.9);
-  font-size: 0.83rem;
-  color: var(--text-main);
-
-  width: 360px;
-  height: 36px;
-  white-space: nowrap;
-}
+      width: 320px;
+      min-height: 40px;
+      max-width: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background:
+        radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(88,28,135,0.35), rgba(15,23,42,0.95));
+      box-shadow: 0 12px 32px rgba(15,23,42,0.9);
+      font-size: 0.86rem;
+      color: var(--text-main);
+    }
     #countdown-remaining {
       color: var(--text-muted);
     }
