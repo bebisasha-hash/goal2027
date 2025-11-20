@@ -68,11 +68,7 @@
   width: 340px;
   font-size: 0.80rem;
   white-space: nowrap;
-
-      width: 340px;
-      font-size: 0.80rem;
-      white-space: nowrap;
-    }
+}
     #countdown-remaining {
       color: var(--text-muted);
     }
@@ -213,7 +209,7 @@
       color: var(--text-muted);
       flex-basis: 100%;
     }
-    .input-row input[type="text" inputmode="decimal"],
+    .input-row input[type="number"],
     .input-row input[type="text"] {
       flex: 1;
       min-width: 90px;
@@ -234,6 +230,15 @@
       gap: 6px;
       margin-top: 4px;
     }
+    .capital-row {
+      flex-wrap: nowrap;
+    }
+    .capital-row button {
+      flex: 1 1 auto;
+      padding: 6px 6px;
+      font-size: 0.75rem;
+    }
+
     button {
       background: linear-gradient(135deg, #38bdf8, #8b5cf6);
       border: none;
@@ -340,15 +345,10 @@
             </div>
           </div>
         </div>
-
-        <div class="input-row">
-          <label>Добавить сеанс</label>
-          <input type="text" inputmode="decimal" step="1" min="0" placeholder="+1" class="js-input">
-        </div>
         <div class="btn-row">
           <button type="button" class="btn-minus js-minus">-</button>
           <button type="button" data-add="1">+</button>
-          <button type="button" class="secondary js-set">Всего</button>
+          
         </div>
       </div>
     </div>
@@ -375,15 +375,10 @@
             </div>
           </div>
         </div>
-
-        <div class="input-row">
-          <label>Добавить книги</label>
-          <input type="text" inputmode="decimal" step="1" min="0" placeholder="+1" class="js-input">
-        </div>
         <div class="btn-row">
           <button type="button" class="btn-minus js-minus">-</button>
           <button type="button" data-add="1">+</button>
-          <button type="button" class="secondary js-set">Всего</button>
+          
         </div>
       </div>
     </div>
@@ -410,15 +405,10 @@
             </div>
           </div>
         </div>
-
-        <div class="input-row">
-          <label>Добавить часы</label>
-          <input type="text" inputmode="decimal" step="0.5" min="0" placeholder="+1" class="js-input">
-        </div>
         <div class="btn-row">
           <button type="button" class="btn-minus js-minus">-</button>
           <button type="button" data-add="1">+</button>
-          <button type="button" class="secondary js-set">Всего</button>
+          
         </div>
       </div>
     </div>
@@ -445,14 +435,16 @@
             </div>
           </div>
         </div>
+        
+        <div class="btn-row capital-row">
+          <button type="button" class="secondary js-capital" data-capital="-100">-100$</button>
+          <button type="button" class="secondary js-capital" data-capital="-10">-10$</button>
+          <button type="button" class="secondary js-capital" data-capital="-1">-1$</button>
+          <button type="button" class="js-capital" data-capital="1">+1$</button>
+          <button type="button" class="js-capital" data-capital="10">+10$</button>
+          <button type="button" class="js-capital" data-capital="100">+100$</button>
+        </div>
 
-        <div class="input-row">
-          <label>Текущий капитал, $</label>
-          <input type="text" placeholder="Например 200,000" class="js-input-absolute">
-        </div>
-        <div class="btn-row">
-          <button type="button" class="secondary js-set-absolute">Обновить сумму</button>
-        </div>
       </div>
     </div>
 
@@ -478,15 +470,10 @@
             </div>
           </div>
         </div>
-
-        <div class="input-row">
-          <label>Сколько уже сброшено, кг</label>
-          <input type="text" inputmode="decimal" step="0.1" min="0" placeholder="Например 1.5" class="js-weight-lost">
-        </div>
         <div class="btn-row">
           <button type="button" class="btn-minus js-weight-minus">-</button>
           <button type="button" class="js-weight-plus">+</button>
-          <button type="button" class="secondary js-weight-total">Всего</button>
+          
         </div>
       </div>
     </div>
@@ -787,127 +774,110 @@
       return num;
     }
 
+    
     function setupInteractions() {
       ["therapy", "books", "hours"].forEach(function(goalId) {
         const card = document.querySelector('.card[data-goal="' + goalId + '"]');
-        const input = card.querySelector(".js-input");
+        if (!card) return;
         const plusBtn = card.querySelector("button[data-add]");
         const minusBtn = card.querySelector(".js-minus");
-        const setBtn = card.querySelector(".js-set");
 
-        plusBtn.addEventListener("click", function() {
-          const delta = Number(plusBtn.getAttribute("data-add") || "0");
-          const manual = Number(input.value || "0");
-          const effective = manual > 0 ? manual : delta;
-          state[goalId].current = Math.max(0, Number(state[goalId].current || 0) + effective);
-          input.value = "";
-          saveState(state);
-          updateGenericCard(goalId, goalId === "hours");
-          updateTotalCard();
-        });
+        if (plusBtn) {
+          plusBtn.addEventListener("click", function() {
+            const delta = Number(plusBtn.getAttribute("data-add") || "0");
+            const current = Number(state[goalId].current || 0);
+            state[goalId].current = Math.max(0, current + delta);
+            saveState(state);
+            updateGenericCard(goalId, goalId === "hours");
+            updateTotalCard();
+          });
+        }
 
-        minusBtn.addEventListener("click", function() {
-          const current = Number(state[goalId].current || 0);
-          const next = current - 1;
-          state[goalId].current = Math.max(0, next);
-          saveState(state);
-          updateGenericCard(goalId, goalId === "hours");
-          updateTotalCard();
-        });
-
-        setBtn.addEventListener("click", function() {
-          var value = window.prompt("Введи общее текущее значение:");
-          if (value === null) return;
-          var num = Number(String(value).replace(",", "."));
-          if (!isFinite(num) || num < 0) return;
-          state[goalId].current = num;
-          saveState(state);
-          updateGenericCard(goalId, goalId === "hours");
-          updateTotalCard();
-        });
-
-        input.addEventListener("keydown", function(e) {
-          if (e.key === "Enter") {
-            plusBtn.click();
-          }
-        });
+        if (minusBtn) {
+          minusBtn.addEventListener("click", function() {
+            const current = Number(state[goalId].current || 0);
+            const next = current - 1;
+            state[goalId].current = Math.max(0, next);
+            saveState(state);
+            updateGenericCard(goalId, goalId === "hours");
+            updateTotalCard();
+          });
+        }
       });
 
       (function() {
         const goalId = "capital";
         const card = document.querySelector('.card[data-goal="' + goalId + '"]');
-        const inputAbs = card.querySelector(".js-input-absolute");
-        const btnSetAbs = card.querySelector(".js-set-absolute");
-        btnSetAbs.addEventListener("click", function() {
-          const val = parseCapitalInput(inputAbs.value);
-          if (!isFinite(val) || val < 0) return;
-          state[goalId].current = val;
-          saveState(state);
-          updateCapitalCard();
-          updateTotalCard();
-        });
-        inputAbs.addEventListener("keydown", function(e) {
-          if (e.key === "Enter") {
-            btnSetAbs.click();
-          }
+        if (!card) return;
+        const buttons = card.querySelectorAll(".js-capital");
+
+        buttons.forEach(function(btn) {
+          const delta = Number(btn.getAttribute("data-capital") || "0");
+          btn.addEventListener("click", function() {
+            const current = Number(state[goalId].current || 0);
+            const next = current + delta;
+            state[goalId].current = Math.max(0, next);
+            saveState(state);
+            updateCapitalCard();
+            updateTotalCard();
+          });
         });
       })();
 
       (function() {
         const goalId = "weight";
         const card = document.querySelector('.card[data-goal="' + goalId + '"]');
-        const inputLost = card.querySelector(".js-weight-lost");
+        if (!card) return;
         const btnPlus = card.querySelector(".js-weight-plus");
         const btnMinus = card.querySelector(".js-weight-minus");
-        const btnTotal = card.querySelector(".js-weight-total");
-
-        if (state.weight && state.weight.lost != null && state.weight.lost > 0) {
-          const lost = Number(state.weight.lost);
-          if (Math.abs(lost - Math.round(lost)) < 1e-6) {
-            inputLost.value = String(Math.round(lost));
-          } else {
-            inputLost.value = lost.toFixed(1);
-          }
-        }
 
         // Минус — уменьшает сброшенный вес (как набрать 1 кг)
-        btnMinus.addEventListener("click", function() {
-          const current = Number(state[goalId].lost || 0);
-          const next = current - 1;
-          state[goalId].lost = Math.max(0, next);
-          saveState(state);
-          updateWeightCard();
-          updateTotalCard();
-        });
+        if (btnMinus) {
+          btnMinus.addEventListener("click", function() {
+            const current = Number(state[goalId].lost || 0);
+            const next = current - 1;
+            state[goalId].lost = Math.max(0, next);
+            saveState(state);
+            updateWeightCard();
+            updateTotalCard();
+          });
+        }
 
         // Плюс — увеличивает сброшенный вес (скинуть 1 кг)
-        btnPlus.addEventListener("click", function() {
-          const current = Number(state[goalId].lost || 0);
-          const next = current + 1;
-          state[goalId].lost = Math.max(0, next);
-          saveState(state);
-          updateWeightCard();
-          updateTotalCard();
-        });
-
-        btnTotal.addEventListener("click", function() {
-          const valRaw = inputLost.value;
-          if (!valRaw) return;
-          const num = Number(String(valRaw).replace(",", "."));
-          if (!isFinite(num) || num < 0) return;
-          state[goalId].lost = num;
-          saveState(state);
-          updateWeightCard();
-          updateTotalCard();
-        });
-
-        inputLost.addEventListener("keydown", function(e) {
-          if (e.key === "Enter") {
-            btnTotal.click();
-          }
-        });
+        if (btnPlus) {
+          btnPlus.addEventListener("click", function() {
+            const current = Number(state[goalId].lost || 0);
+            const next = current + 1;
+            state[goalId].lost = Math.max(0, next);
+            saveState(state);
+            updateWeightCard();
+            updateTotalCard();
+          });
+        }
       })();
-    }
+    
+      // Обнуление целей по кнопке "Обнулить"
+      document.querySelectorAll(".card").forEach(function(card) {
+        const resetBtn = card.querySelector(".js-reset");
+        if (!resetBtn) return;
+        const goalId = card.getAttribute("data-goal");
+        resetBtn.addEventListener("click", function() {
+          if (!goalId) return;
+          if (goalId === "weight") {
+            if (!state.weight) state.weight = { lost: 0 };
+            state.weight.lost = 0;
+          } else if (goalId === "capital") {
+            if (!state.capital) state.capital = { current: 0 };
+            state.capital.current = 0;
+          } else {
+            if (!state[goalId]) state[goalId] = { current: 0 };
+            state[goalId].current = 0;
+          }
+          saveState(state);
+          updateUI();
+        });
+      });
+}
 
     document.addEventListener("DOMContentLoaded", function() {
       updateCountdown();
