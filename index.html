@@ -49,7 +49,7 @@
       font-weight: 700;
     }
     .countdown-box {
-      width: 320px;
+      width: 340px;
       min-height: 40px;
       max-width: 100%;
       display: inline-flex;
@@ -62,13 +62,10 @@
         radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 55%),
         radial-gradient(circle at bottom right, rgba(88,28,135,0.35), #0f172a);
       box-shadow: 0 12px 32px rgba(15,23,42,0.9);
-      font-size: 0.86rem;
+      font-size: 0.80rem;
       color: var(--text-main);
-    
-  width: 340px;
-  font-size: 0.80rem;
-  white-space: nowrap;
-}
+      white-space: nowrap;
+    }
     #countdown-remaining {
       color: var(--text-muted);
     }
@@ -114,8 +111,8 @@
         radial-gradient(circle at 100% 0, rgba(168,85,247,.12), transparent 55%);
       opacity: 0.9;
       pointer-events: none;
-      z-index: 0;
-}
+      z-index: -1;
+    }
     .card-inner {
       position: relative;
       z-index: 1;
