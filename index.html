@@ -175,6 +175,7 @@
       flex-direction: column;
       gap: 4px;
       font-size: 0.9rem;
+      line-height: 18px;
     }
     .progress-main {
       font-size: 1.05rem;
@@ -326,6 +327,7 @@
       align-items: center;
       justify-content: center;
       font-size: 0.9rem;
+      line-height: 18px;
       color: transparent;
       cursor: pointer;
       flex-shrink: 0;
@@ -353,7 +355,26 @@
       100% { transform: scale(1.0); }
     }
 
-  </style>
+  
+    .goal-check.state1 {
+      background: radial-gradient(circle, rgba(56,189,248,0.6), rgba(15,23,42,0.95));
+      border-color: rgba(56,189,248,1);
+      color:#e0f2fe;
+      align-items: flex-start;
+      padding-top: 0px; margin-top:-1px;
+    }
+    .goal-check.state2 {
+      background: radial-gradient(circle, rgba(74,222,128,0.6), rgba(22,163,74,1));
+      border-color: rgba(74,222,128,1);
+      color:#ecfdf5;
+    }
+
+
+    .goal-check.state1 {
+      
+    }
+
+</style>
   <meta name="theme-color" content="#0f172a">
 </head>
 <body>
@@ -573,31 +594,31 @@
     let state = loadState();
     function ensureDefaults() {
       if (!state.therapy) {
-        state.therapy = { current: 0, checked: false };
+        state.therapy = { current: 0, state:0 };
       } else if (state.therapy.checked == null) {
         state.therapy.checked = false;
       }
 
       if (!state.books) {
-        state.books = { current: 0, checked: false };
+        state.books = { current: 0, state:0 };
       } else if (state.books.checked == null) {
         state.books.checked = false;
       }
 
       if (!state.hours) {
-        state.hours = { current: 0, checked: false };
+        state.hours = { current: 0, state:0 };
       } else if (state.hours.checked == null) {
         state.hours.checked = false;
       }
 
       if (!state.capital) {
-        state.capital = { current: 0, checked: false };
+        state.capital = { current: 0, state:0 };
       } else if (state.capital.checked == null) {
         state.capital.checked = false;
       }
 
       if (!state.weight || typeof state.weight !== "object" || state.weight.lost == null) {
-        state.weight = { lost: 0, checked: false };
+        state.weight = { lost: 0, state:0 };
       } else if (state.weight.checked == null) {
         state.weight.checked = false;
       }
@@ -949,7 +970,7 @@
             if (!state.capital) state.capital = { current: 0, checked: state.capital && state.capital.checked || false };
             state.capital.current = 0;
           } else {
-            if (!state[goalId]) state[goalId] = { current: 0, checked: false };
+            if (!state[goalId]) state[goalId] = { current: 0, state:0 };
             state[goalId].current = 0;
           }
           saveState(state);
@@ -967,11 +988,11 @@
         function ensureGoalDefaults() {
           if (!state[goalId]) {
             if (goalId === 'weight') {
-              state[goalId] = { lost: 0, checked: false };
+              state[goalId] = { lost: 0, state:0 };
             } else if (goalId === 'capital') {
-              state[goalId] = { current: 0, checked: false };
+              state[goalId] = { current: 0, state:0 };
             } else {
-              state[goalId] = { current: 0, checked: false };
+              state[goalId] = { current: 0, state:0 };
             }
           } else if (state[goalId].checked == null) {
             state[goalId].checked = false;
@@ -980,12 +1001,15 @@
 
         function syncCheckUI() {
           ensureGoalDefaults();
-          if (state[goalId].checked) {
-            checkEl.classList.add('checked');
+          checkEl.classList.remove('state1','state2');
+          if(state[goalId].state===1){
+            checkEl.classList.add('state1');
+            checkEl.textContent = '∞';
+          } else if(state[goalId].state===2){
+            checkEl.classList.add('state2');
             checkEl.textContent = '✓';
           } else {
-            checkEl.classList.remove('checked');
-            checkEl.textContent = '';
+            checkEl.textContent='';
           }
         }
 
@@ -993,7 +1017,11 @@
 
         checkEl.addEventListener('click', function() {
           ensureGoalDefaults();
-          state[goalId].checked = !state[goalId].checked;
+          
+          // cycle states: 0->1->2->0
+          state[goalId].state = (state[goalId].state||0)+1;
+          if(state[goalId].state>2) state[goalId].state=0;
+
           saveState(state);
           checkEl.classList.add('pulse');
           setTimeout(function() {
