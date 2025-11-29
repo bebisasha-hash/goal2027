@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Год, который изменит всё</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Sense">
@@ -35,6 +35,7 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      touch-action: manipulation;
     }
     header {
       display: flex;
@@ -124,7 +125,7 @@
     }
     /* Hover только для обычных карточек, не общего прогресса */
     .card:not(.card-total):hover {
-      transform: translateY(-2px) scale(1.01);
+      transform: translateY(-2px);
       box-shadow: 0 16px 36px rgba(15, 23, 42, 0.9);
       border-color: rgba(148, 163, 184, 0.4);
     }
@@ -311,6 +312,47 @@
       margin-top: 6px;
       text-align: center;
     }
+  
+    .goal-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: 1px solid rgba(248, 250, 252, 0.7);
+      box-shadow:
+        0 0 0 1px rgba(148, 163, 184, 0.18),
+        0 0 12px rgba(148, 163, 184, 0.35);
+      background: radial-gradient(circle at 30% 0, rgba(148,163,184,0.35), rgba(15,23,42,0.95));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: transparent;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition:
+        background 0.18s ease-out,
+        box-shadow 0.18s ease-out,
+        border-color 0.18s ease-out,
+        color 0.18s ease-out,
+        transform 0.16s ease-out;
+    }
+    .goal-check.checked {
+      border-color: rgba(74, 222, 128, 1);
+      background: radial-gradient(circle at 30% 0, rgba(74,222,128,0.6), rgba(22,163,74,1));
+      box-shadow:
+        0 0 0 1px rgba(34,197,94,0.45),
+        0 0 16px rgba(34,197,94,0.7);
+      color: #ecfdf5;
+    }
+    .goal-check.pulse {
+      animation: goalCheckPulse 0.18s ease-out;
+    }
+    @keyframes goalCheckPulse {
+      0% { transform: scale(0.7); }
+      60% { transform: scale(1.12); }
+      100% { transform: scale(1.0); }
+    }
+
   </style>
   <meta name="theme-color" content="#0f172a">
 </head>
@@ -328,6 +370,7 @@
       <div class="card-inner">
         <div class="card-header">
           <div class="card-title">Психолог</div>
+          <div class="goal-check js-goal-check"></div>
         </div>
         <div class="progress-wrap">
           <div class="progress-circle">
@@ -358,6 +401,7 @@
       <div class="card-inner">
         <div class="card-header">
           <div class="card-title">Книги</div>
+          <div class="goal-check js-goal-check"></div>
         </div>
         <div class="progress-wrap">
           <div class="progress-circle">
@@ -388,6 +432,7 @@
       <div class="card-inner">
         <div class="card-header">
           <div class="card-title">Часы работы</div>
+          <div class="goal-check js-goal-check"></div>
         </div>
         <div class="progress-wrap">
           <div class="progress-circle">
@@ -418,6 +463,7 @@
       <div class="card-inner">
         <div class="card-header">
           <div class="card-title">Капитал</div>
+          <div class="goal-check js-goal-check"></div>
         </div>
         <div class="progress-wrap">
           <div class="progress-circle">
@@ -454,6 +500,7 @@
       <div class="card-inner">
         <div class="card-header">
           <div class="card-title">Фигура мечты</div>
+          <div class="goal-check js-goal-check"></div>
         </div>
         <div class="progress-wrap">
           <div class="progress-circle">
@@ -525,12 +572,34 @@
     }
     let state = loadState();
     function ensureDefaults() {
-      if (!state.therapy) state.therapy = { current: 0 };
-      if (!state.books)   state.books   = { current: 0 };
-      if (!state.hours)   state.hours   = { current: 0 };
-      if (!state.capital) state.capital = { current: 0 };
+      if (!state.therapy) {
+        state.therapy = { current: 0, checked: false };
+      } else if (state.therapy.checked == null) {
+        state.therapy.checked = false;
+      }
+
+      if (!state.books) {
+        state.books = { current: 0, checked: false };
+      } else if (state.books.checked == null) {
+        state.books.checked = false;
+      }
+
+      if (!state.hours) {
+        state.hours = { current: 0, checked: false };
+      } else if (state.hours.checked == null) {
+        state.hours.checked = false;
+      }
+
+      if (!state.capital) {
+        state.capital = { current: 0, checked: false };
+      } else if (state.capital.checked == null) {
+        state.capital.checked = false;
+      }
+
       if (!state.weight || typeof state.weight !== "object" || state.weight.lost == null) {
-        state.weight = { lost: 0 };
+        state.weight = { lost: 0, checked: false };
+      } else if (state.weight.checked == null) {
+        state.weight.checked = false;
       }
     }
     ensureDefaults();
@@ -694,10 +763,12 @@
       const subText  = card.querySelector(".js-text-sub");
       const currentLostText = formatKg(lost);
       const targetText = formatKg(targetLoss);
-      const remainingText = formatKg(Math.max(0, targetLoss - lost));
+      const currentWeight = cfg.start - lost;
+      const remainingToGoal = Math.max(0, currentWeight - cfg.targetWeight);
+      const remainingText = formatKg(remainingToGoal);
       mainText.textContent = currentLostText + " кг из " + targetText + " кг";
       subText.textContent =
-        "Осталось " + remainingText + " кг · Цель: " + cfg.targetWeight + " кг (старт: " + cfg.start + " кг)";
+        "Осталось " + remainingText + " кг · Цель: " + cfg.targetWeight + " кг (сейчас: " + formatKg(currentWeight) + " кг)";
       const inputLost = card.querySelector(".js-weight-lost");
       if (inputLost) {
         if (lost > 0) {
@@ -831,12 +902,18 @@
         if (!card) return;
         const btnPlus = card.querySelector(".js-weight-plus");
         const btnMinus = card.querySelector(".js-weight-minus");
+        const STEP = 0.1;
 
-        // Минус — уменьшает сброшенный вес (как набрать 1 кг)
+        function roundToStep(value) {
+          return Math.round(value * 10) / 10;
+        }
+
+        // Минус — уменьшает сброшенный вес (как набрать 0.1 кг)
         if (btnMinus) {
           btnMinus.addEventListener("click", function() {
             const current = Number(state[goalId].lost || 0);
-            const next = current - 1;
+            let next = current - STEP;
+            next = roundToStep(next);
             state[goalId].lost = Math.max(0, next);
             saveState(state);
             updateWeightCard();
@@ -844,11 +921,12 @@
           });
         }
 
-        // Плюс — увеличивает сброшенный вес (скинуть 1 кг)
+        // Плюс — увеличивает сброшенный вес (скинуть 0.1 кг)
         if (btnPlus) {
           btnPlus.addEventListener("click", function() {
             const current = Number(state[goalId].lost || 0);
-            const next = current + 1;
+            let next = current + STEP;
+            next = roundToStep(next);
             state[goalId].lost = Math.max(0, next);
             saveState(state);
             updateWeightCard();
@@ -865,17 +943,63 @@
         resetBtn.addEventListener("click", function() {
           if (!goalId) return;
           if (goalId === "weight") {
-            if (!state.weight) state.weight = { lost: 0 };
+            if (!state.weight) state.weight = { lost: 0, checked: state.weight && state.weight.checked || false };
             state.weight.lost = 0;
           } else if (goalId === "capital") {
-            if (!state.capital) state.capital = { current: 0 };
+            if (!state.capital) state.capital = { current: 0, checked: state.capital && state.capital.checked || false };
             state.capital.current = 0;
           } else {
-            if (!state[goalId]) state[goalId] = { current: 0 };
+            if (!state[goalId]) state[goalId] = { current: 0, checked: false };
             state[goalId].current = 0;
           }
           saveState(state);
           updateUI();
+        });
+      });
+
+      // Чек-поинты в правом верхнем углу карточек целей
+      document.querySelectorAll('.card[data-goal]').forEach(function(card) {
+        const goalId = card.getAttribute('data-goal');
+        if (!goalId || goalId === 'total') return;
+        const checkEl = card.querySelector('.js-goal-check');
+        if (!checkEl) return;
+
+        function ensureGoalDefaults() {
+          if (!state[goalId]) {
+            if (goalId === 'weight') {
+              state[goalId] = { lost: 0, checked: false };
+            } else if (goalId === 'capital') {
+              state[goalId] = { current: 0, checked: false };
+            } else {
+              state[goalId] = { current: 0, checked: false };
+            }
+          } else if (state[goalId].checked == null) {
+            state[goalId].checked = false;
+          }
+        }
+
+        function syncCheckUI() {
+          ensureGoalDefaults();
+          if (state[goalId].checked) {
+            checkEl.classList.add('checked');
+            checkEl.textContent = '✓';
+          } else {
+            checkEl.classList.remove('checked');
+            checkEl.textContent = '';
+          }
+        }
+
+        syncCheckUI();
+
+        checkEl.addEventListener('click', function() {
+          ensureGoalDefaults();
+          state[goalId].checked = !state[goalId].checked;
+          saveState(state);
+          checkEl.classList.add('pulse');
+          setTimeout(function() {
+            checkEl.classList.remove('pulse');
+          }, 180);
+          syncCheckUI();
         });
       });
 }
