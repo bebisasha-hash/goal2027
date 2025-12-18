@@ -2,7 +2,16 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#ff3f93" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Проект: новая реальность" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <title>Проект: новая реальность</title>
   <style>
     html, body {
@@ -172,6 +181,16 @@ body.dark .card-title{ color:#1f2937 !important; }
   background: linear-gradient(135deg, var(--pink-2), var(--pink-1)) !important;
 }
 
+
+    /* PWA / iOS standalone polish */
+    body {
+      padding-top: env(safe-area-inset-top);
+      padding-right: env(safe-area-inset-right);
+      padding-bottom: env(safe-area-inset-bottom);
+      padding-left: env(safe-area-inset-left);
+      overscroll-behavior: none;
+      -webkit-overflow-scrolling: touch;
+    }
 </style>
 </head>
 <body class="mode-light">
@@ -10510,5 +10529,15 @@ header{
       show(last === 2 ? 2 : 1);
     } catch(e) {}
   </script>
+
+  <script>
+    // Register service worker for installability/offline shell (requires HTTPS or localhost)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+  </script>
+
 </body>
 </html>
