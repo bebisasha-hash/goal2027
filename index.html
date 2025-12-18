@@ -2,28 +2,32 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#ff3f93" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Проект: новая реальность" />
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
-  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
-  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Проект: новая реальность</title>
   <style>
     html, body {
       height: 100%;
       margin: 0;
-      background: #05010a;
+      background: #ffffff;
+          overscroll-behavior: none;
+      background-color: #ffffff;
     }
-    .switcher {
+    .switcher-wrap{
       position: fixed;
-      top: 14px;
-      right: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      top: calc(env(safe-area-inset-top, 0px) + 88px);
       z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 0 14px;
+      pointer-events: none; /* only inner controls clickable */
+    }
+
+    .switcher {
+      pointer-events: auto;
       display: flex;
       gap: 8px;
       padding: 8px;
@@ -32,7 +36,7 @@
       border: 1px solid rgba(255,255,255,0.12);
       backdrop-filter: blur(10px);
       box-shadow: 0 18px 44px rgba(0,0,0,0.35);
-    }
+}
     .sw-btn {
       appearance: none;
       border: 1px solid rgba(255,255,255,0.14);
@@ -40,18 +44,18 @@
       color: rgba(255,255,255,0.92);
       padding: 8px 12px;
       border-radius: 999px;
-      font: 600 12px/1.0 system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      font: 700 12px/1.0 system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
       cursor: pointer;
       transition: transform .12s ease, background .12s ease, border-color .12s ease, opacity .12s ease;
       white-space: nowrap;
       user-select: none;
-    }
-    .sw-btn:hover { background: rgba(255,255,255,0.09); }
+}
+.sw-btn:hover { background: rgba(255,255,255,0.10); }
     .sw-btn:active { transform: translateY(1px) scale(0.99); }
     .sw-btn.active {
       background: linear-gradient(135deg, rgba(255,79,191,0.95), rgba(255,99,204,0.95), rgba(255,124,219,0.95));
       border-color: rgba(255,255,255,0.18);
-    }
+}
     .page {
       position: fixed;
       inset: 0;
@@ -59,108 +63,9 @@
       height: 100%;
       border: 0;
       display: none;
-      background: transparent;
+      background: #ffffff;
     }
     .page.active { display: block; }
-
-/* ===== Premium switcher (pink-only), theme follows active page ===== */
-.switcher{
-  position: fixed;
-  top: 14px;
-  right: 14px;
-  z-index: 999999;
-  display: flex;
-  gap: 8px;
-  padding: 8px;
-  border-radius: 999px;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 18px 50px rgba(0,0,0,0.22);
-}
-
-.sw-btn{
-  appearance: none;
-  padding: 9px 14px;
-  border-radius: 999px;
-  font: 650 12px/1 system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
-  letter-spacing: 0.2px;
-  cursor: pointer;
-  white-space: nowrap;
-  user-select: none;
-  transition: transform .16s ease, background .16s ease, border-color .16s ease, box-shadow .16s ease, color .16s ease, opacity .16s ease;
-}
-
-.sw-btn:active{ transform: translateY(1px) scale(0.99); }
-
-/* Light page */
-body.mode-light .switcher{
-  background: rgba(255,255,255,0.78);
-  border: 1px solid rgba(17,24,39,0.10);
-  box-shadow: 0 16px 44px rgba(17,24,39,0.10);
-}
-
-body.mode-light .sw-btn{
-  color: rgba(17,24,39,0.88);
-  border: 1px solid rgba(17,24,39,0.12);
-  background: rgba(255,255,255,0.84);
-  box-shadow:
-    0 10px 22px rgba(17,24,39,0.06),
-    inset 0 1px 0 rgba(255,255,255,0.75);
-}
-
-body.mode-light .sw-btn:hover{
-  transform: translateY(-1px);
-  background: rgba(255,255,255,0.92);
-  border-color: rgba(17,24,39,0.16);
-  box-shadow:
-    0 14px 28px rgba(17,24,39,0.08),
-    inset 0 1px 0 rgba(255,255,255,0.85);
-}
-
-body.mode-light .sw-btn.active{
-  color: #fff;
-  border-color: rgba(255,255,255,0.35);
-  background: linear-gradient(135deg, #ff5fa2 0%, #ff78b8 55%, #ff9ccf 100%);
-  box-shadow:
-    0 14px 30px rgba(255,95,162,0.30),
-    0 6px 16px rgba(255,120,184,0.22),
-    inset 0 1px 0 rgba(255,255,255,0.35);
-}
-
-/* Dark page */
-body.mode-dark .switcher{
-  background: rgba(10,10,14,0.44);
-  border: 1px solid rgba(255,255,255,0.12);
-  box-shadow: 0 22px 60px rgba(0,0,0,0.38);
-}
-
-body.mode-dark .sw-btn{
-  color: rgba(255,255,255,0.90);
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.07);
-  box-shadow:
-    0 12px 26px rgba(0,0,0,0.28),
-    inset 0 1px 0 rgba(255,255,255,0.10);
-}
-
-body.mode-dark .sw-btn:hover{
-  transform: translateY(-1px);
-  background: rgba(255,255,255,0.10);
-  border-color: rgba(255,255,255,0.18);
-  box-shadow:
-    0 16px 34px rgba(0,0,0,0.34),
-    inset 0 1px 0 rgba(255,255,255,0.12);
-}
-
-body.mode-dark .sw-btn.active{
-  color: #fff;
-  border-color: rgba(255,255,255,0.18);
-  background: linear-gradient(135deg, rgba(200,45,110,0.96) 0%, rgba(220,70,130,0.96) 55%, rgba(240,110,165,0.96) 100%);
-  box-shadow:
-    0 20px 48px rgba(180,40,95,0.28),
-    0 12px 28px rgba(220,90,140,0.20),
-    inset 0 1px 0 rgba(255,255,255,0.14);
-}
 
 
     /* Keep switcher clickable even if iframes have overlays */
@@ -181,23 +86,70 @@ body.dark .card-title{ color:#1f2937 !important; }
   background: linear-gradient(135deg, var(--pink-2), var(--pink-1)) !important;
 }
 
-
-    /* PWA / iOS standalone polish */
-    body {
-      padding-top: env(safe-area-inset-top);
-      padding-right: env(safe-area-inset-right);
-      padding-bottom: env(safe-area-inset-bottom);
-      padding-left: env(safe-area-inset-left);
-      overscroll-behavior: none;
-      -webkit-overflow-scrolling: touch;
-    }
+    body.mode-dark 
 </style>
+
+
+
+
+<style id="switcher-force">
+/* Default (dark page) */
+.switcher-wrap .switcher{
+  background: rgba(0,0,0,0.38);
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: 0 14px 36px rgba(0,0,0,0.28);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.switcher-wrap .sw-btn{
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.20);
+  color: rgba(255,255,255,0.96);
+}
+.switcher-wrap .sw-btn.active{
+  background: linear-gradient(135deg, #ff6aa8, #ff3f93) !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Light page — WHITE switcher */
+body.mode-light .switcher-wrap .switcher{
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(17,24,39,0.12);
+  box-shadow: 0 12px 28px rgba(17,24,39,0.12);
+}
+body.mode-light .switcher-wrap .sw-btn{
+  background: rgba(255,255,255,0.85);
+  color: #0b0f19;
+  opacity: 1;
+}
+body.mode-light .switcher-wrap .sw-btn:hover{
+  background: rgba(17,24,39,0.06);
+}
+body.mode-light .switcher-wrap .sw-btn.active{
+  background: linear-gradient(135deg, #ff6aa8, #ff3f93) !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+</style>
+
+
+<style id="switcher-visibility-fix">
+.switcher-wrap{ z-index: 2147483647 !important; }
+.switcher-wrap .switcher{ background-clip: padding-box; }
+body.mode-light .switcher-wrap .sw-btn{ opacity: 1 !important; }
+</style>
+
 </head>
 <body class="mode-light">
-  <div class="switcher" role="tablist" aria-label="Переключатель страниц">
-    <button class="sw-btn active" id="btn-page-1" type="button" role="tab" aria-selected="true">10 лет</button>
-    <button class="sw-btn" id="btn-page-2" type="button" role="tab" aria-selected="false">Год, который изменит все</button>
-  </div>
+  <div class="switcher-wrap" aria-label="Навигация страниц">
+    <div class="switcher" role="tablist" aria-label="Переключатель страниц">
+      <button class="sw-btn active" id="btn-page-1" type="button" role="tab" aria-selected="true" data-title="10 лет">10</button>
+      <button class="sw-btn" id="btn-page-2" type="button" role="tab" aria-selected="false" data-title="Год, который изменит все">1</button>
+    </div>
+      </div>
 
   <iframe class="page active" id="page-1" title="Проект: новая реальность" srcdoc="&lt;!DOCTYPE html&gt;
 
@@ -216,7 +168,10 @@ body.dark .card-title{ color:#1f2937 !important; }
       --text-main: #e5e7eb;
       --text-muted: #9ca3af;
       --radius-lg: 18px;
-    }
+    
+  --pink-1: #ff6aa8;
+  --pink-2: #ff3f93;
+}
     * {
       box-sizing: border-box;
       margin: 0;
@@ -752,7 +707,7 @@ button.secondary{
 
 /* Tags */
 .goal-tag{
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.92);
   border: 1px solid rgba(255,255,255,0.10);
   color: rgba(229,231,235,0.92);
   backdrop-filter: blur(10px);
@@ -3044,6 +2999,7 @@ header{
 }
 &lt;/style&gt;
 
+&lt;style id=&quot;pwa-safe-top&quot;&gt;body{padding-top:calc(env(safe-area-inset-top, 0px) + 140px) !important;}&lt;/style&gt;
 &lt;/head&gt;
 
 &lt;body&gt;
@@ -7501,7 +7457,7 @@ button.secondary{
 
 /* Tags */
 .goal-tag{
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.92);
   border: 1px solid rgba(255,255,255,0.10);
   color: rgba(229,231,235,0.92);
   backdrop-filter: blur(10px);
@@ -8211,6 +8167,7 @@ header{
 }
 
 &lt;/style&gt;
+&lt;style id=&quot;pwa-safe-top&quot;&gt;body{padding-top:calc(env(safe-area-inset-top, 0px) + 140px) !important;}&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 &lt;header&gt;
@@ -10492,6 +10449,7 @@ header{
     const btn2 = document.getElementById('btn-page-2');
     const p1 = document.getElementById('page-1');
     const p2 = document.getElementById('page-2');
+    const caption = document.getElementById('switcherCaption');
 
     function show(which) {
       const is1 = which === 1;
@@ -10503,6 +10461,8 @@ header{
 
       btn1.setAttribute('aria-selected', String(is1));
       btn2.setAttribute('aria-selected', String(!is1));
+
+      if (caption) caption.textContent = is1 ? (btn1.dataset.title || btn1.textContent) : (btn2.dataset.title || btn2.textContent);
 
       // switcher theme follows active page
       document.body.classList.toggle('mode-light', is1);
@@ -10529,15 +10489,5 @@ header{
       show(last === 2 ? 2 : 1);
     } catch(e) {}
   </script>
-
-  <script>
-    // Register service worker for installability/offline shell (requires HTTPS or localhost)
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
-      });
-    }
-  </script>
-
 </body>
 </html>
