@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
   <title>Проект: новая реальность</title>
   <style>
     html, body {
@@ -141,6 +141,19 @@ body.mode-light .switcher-wrap .sw-btn.active{
 .switcher-wrap .switcher{ background-clip: padding-box; }
 body.mode-light .switcher-wrap .sw-btn{ opacity: 1 !important; }
 </style>
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Sense" />
+<meta name="format-detection" content="telephone=no" />
+
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="theme-color" content="#ffffff" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=5" />
+
+<link rel="manifest" href="manifest.webmanifest?v=5" />
 
 </head>
 <body class="mode-light">
@@ -10489,5 +10502,18 @@ header{
       show(last === 2 ? 2 : 1);
     } catch(e) {}
   </script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      // Works on GitHub Pages subpaths (e.g., /REPO_NAME/)
+      const base = location.pathname.endsWith('/')
+        ? location.pathname
+        : location.pathname.replace(/\/[^\/]*$/, '/');
+      navigator.serviceWorker.register(base + 'sw.js?v=5', { scope: base }).catch(()=>{});
+    });
+  }
+</script>
+
 </body>
 </html>
