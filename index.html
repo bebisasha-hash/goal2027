@@ -242,22 +242,16 @@ html, body{
 
 
 <style id="ios-safearea-cover-fix">
-/* === iOS PWA: cover the home-indicator area instead of reserving it ===
-   This removes the visible bottom bar by letting the fixed iframes extend
-   *under* the safe-area, while keeping the background consistent.
-*/
+/* Variant 1: extend the iframe pages under the iOS safe-area to hide the bar */
 html, body{
   height: 100%;
   margin: 0;
   overflow: hidden;
   background: var(--shell-bg, #ffffff) !important;
 }
-body{
-  padding-bottom: 0 !important; /* disable reserved safe-area padding */
-}
+body{ padding-bottom: 0 !important; }
 
-/* Our "pages" are the iframes themselves (.page).
-   Extend them below the viewport by the safe-area height to fully cover the gap. */
+/* Extend the iframe below the viewport by the safe-area height */
 .page{
   position: fixed !important;
   top: 0 !important;
@@ -265,15 +259,13 @@ body{
   right: 0 !important;
   bottom: calc(-1 * env(safe-area-inset-bottom, 0px)) !important;
   width: 100% !important;
+  height: auto !important;
   border: 0 !important;
   background: var(--shell-bg, #ffffff) !important;
 }
 
-/* Avoid 1px compositor seams */
-.page, .page *{
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-}
+/* Reduce compositor seams */
+.page{ transform: translateZ(0); -webkit-transform: translateZ(0); }
 </style>
 
 </head>
