@@ -8465,9 +8465,28 @@ header h1::before{
 &lt;html lang=&quot;ru&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;/&gt;
-&lt;title&gt;Год, который<br>изменит все&lt;/title&gt;
+&lt;title&gt;Год, который&lt;br&gt;изменит все&lt;/title&gt;
 &lt;meta content=&quot;width=device-width, initial-scale=1.0&quot; name=&quot;viewport&quot;/&gt;
 &lt;style&gt;
+
+/* Mobile: allow title to wrap (no clipping) */
+header h1{
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  hyphens: auto !important;
+}
+@media (max-width: 420px){
+  header h1{
+    font-size: 1.65rem !important;
+    line-height: 1.15 !important;
+  }
+}
+
+
+
 /* Dark site: refined pink line (match white style) */
 /* Dark site: refined pink line (match white style) */
 /* Dark site: refined pink line (match white style exactly) */
@@ -8880,9 +8899,7 @@ header h1::before{
     .tag-sense { background: rgba(244,114,182,0.18); color:#f9a8d4; border-color: rgba(244,114,182,0.45);} 
     .tag-social { background: rgba(251,146,60,0.18); color:#fdba74; border-color: rgba(251,146,60,0.45);} 
     .tag-money { background: rgba(34,197,94,0.18); color:#86efac; border-color: rgba(34,197,94,0.45);} 
-    
-    .tag-efficiency { background: rgba(255,95,158,0.16); color:#ffd1e3; border-color: rgba(255,95,158,0.45);}
-.tag-buy { background: rgba(96,165,250,0.18); color:#bfdbfe; border-color: rgba(96,165,250,0.45);} 
+    .tag-buy { background: rgba(96,165,250,0.18); color:#bfdbfe; border-color: rgba(96,165,250,0.45);} 
     .tag-body { background: rgba(168,85,247,0.18); color:#d8b4fe; border-color: rgba(168,85,247,0.45);} 
     .tag-dev { background: rgba(253,224,71,0.18); color:#fde68a; border-color: rgba(253,224,71,0.45);} 
 
@@ -9842,6 +9859,7 @@ header h1::after{ content:none !important; display:none !important; }
 &lt;button class=&quot;filter-btn active&quot; data-filter=&quot;all&quot;&gt;Все&lt;/button&gt;
 &lt;button class=&quot;filter-btn&quot; data-filter=&quot;inprogress&quot;&gt;В процессе&lt;/button&gt;
 &lt;button class=&quot;filter-btn&quot; data-filter=&quot;money&quot;&gt;Деньги&lt;/button&gt;
+&lt;button class=&quot;filter-btn&quot; data-filter=&quot;efficiency&quot;&gt;Эффективность&lt;/button&gt;
 &lt;button class=&quot;filter-btn&quot; data-filter=&quot;sense&quot;&gt;Sense&lt;/button&gt;
 &lt;button class=&quot;filter-btn&quot; data-filter=&quot;body&quot;&gt;Тело&lt;/button&gt;
 &lt;button class=&quot;filter-btn&quot; data-filter=&quot;dev&quot;&gt;Развитие&lt;/button&gt;
@@ -9864,10 +9882,10 @@ header h1::after{ content:none !important; display:none !important; }
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div class=&quot;card&quot; data-goal=&quot;work_hours&quot; data-sphere=&quot;money&quot;&gt;
+&lt;div class=&quot;card&quot; data-goal=&quot;work_hours&quot; data-sphere=&quot;efficiency&quot;&gt;
 &lt;div class=&quot;card-inner&quot;&gt;
 &lt;div class=&quot;card-header&quot;&gt;
-&lt;div class=&quot;card-title&quot;&gt;Часы работы&lt;span class=&quot;goal-tag tag-money&quot;&gt;деньги&lt;/span&gt;&lt;/div&gt;
+&lt;div class=&quot;card-title&quot;&gt;Часы работы&lt;span class=&quot;goal-tag&quot;&gt;эффективность&lt;/span&gt;&lt;/div&gt;
 &lt;button class=&quot;daily-check&quot; title=&quot;Отметить, что сегодня работала над этой целью&quot; type=&quot;button&quot;&gt;
 &lt;span class=&quot;daily-check-circle&quot;&gt;&lt;/span&gt;
 &lt;/button&gt;
@@ -9901,7 +9919,7 @@ header h1::after{ content:none !important; display:none !important; }
 &lt;div class=&quot;card&quot; data-goal=&quot;income&quot; data-sphere=&quot;money&quot;&gt;
 &lt;div class=&quot;card-inner&quot;&gt;
 &lt;div class=&quot;card-header&quot;&gt;
-&lt;div class=&quot;card-title&quot;&gt;Доход&lt;span class=&quot;goal-tag tag-money&quot;&gt;деньги&lt;/span&gt;&lt;/div&gt;
+&lt;div class=&quot;card-title&quot;&gt;Доход&lt;span class=&quot;goal-tag&quot;&gt;эффективность&lt;/span&gt;&lt;/div&gt;
 &lt;button class=&quot;daily-check&quot; title=&quot;Отметить, что сегодня работала над этой целью&quot; type=&quot;button&quot;&gt;
 &lt;span class=&quot;daily-check-circle&quot;&gt;&lt;/span&gt;
 &lt;/button&gt;
