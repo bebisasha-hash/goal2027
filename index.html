@@ -557,6 +557,21 @@ body.mode-dark .title::after{
 }
 </style>
 
+
+<style id="shell-bg-fix-v1">
+:root{ --shell-bg:#ffffff; }
+html, body{
+  background: var(--shell-bg) !important;
+  background-color: var(--shell-bg) !important;
+}
+body.mode-dark{ --shell-bg:#050814; }
+body.mode-light{ --shell-bg:#ffffff; }
+/* Iframes/pages should never paint white behind content */
+.page, #pages, iframe.page{
+  background: var(--shell-bg) !important;
+}
+</style>
+
 </head>
 <body class="mode-light">
   </div>
@@ -12415,56 +12430,97 @@ header h1::before{
 (function(){
   const tab10 = document.getElementById('tab-10');
   const tab1  = document.getElementById('tab-1');
-  const btn1  = document.getElementById('btn-page-1'); // existing top switcher 10
-  const btn2  = document.getElementById('btn-page-2'); // existing top switcher 1
+  const btn1  = document.getElementById('btn-page-1'); // top switcher (10 лет)
+  const btn2  = document.getElementById('btn-page-2'); // top switcher (1 год)
   const page1 = document.getElementById('page-1');
   const page2 = document.getElementById('page-2');
 
-  function setActive(isTen){
-    tab10.classList.toggle('active', !!isTen);
-    tab1.classList.toggle('active', !isTen);
-    tab10.setAttribute('aria-selected', !!isTen);
-    tab1.setAttribute('aria-selected', !isTen);
+  function isTenActive(){
+    return !!(page1 && page1.classList.contains('active'));
   }
 
-  function showPage(isTen){
-    // sync shell theme with page
-    document.body.classList.toggle('mode-light', !!isTen);
-    document.body.classList.toggle('mode-dark', !isTen);
-
-    // Prefer clicking existing buttons if handlers exist
-    if(isTen){
-      if(btn1) btn1.click();
-      else{
-        if(page1) page1.classList.add('active');
-        if(page2) page2.classList.remove('active');
-      }
-      setActive(true);
-    }else{
-      if(btn2) btn2.click();
-      else{
-        if(page2) page2.classList.add('active');
-        if(page1) page1.classList.remove('active');
-      }
-      setActive(false);
+  function setActiveUI(isTen){
+    if(tab10){
+      tab10.classList.toggle('active', !!isTen);
+      tab10.setAttribute('aria-selected', !!isTen);
+    }
+    if(tab1){
+      tab1.classList.toggle('active', !isTen);
+      tab1.setAttribute('aria-selected', !isTen);
     }
   }
 
-  if(tab10) tab10.addEventListener('click', ()=>showPage(true));
-  if(tab1)  tab1.addEventListener('click',  ()=>showPage(false));
+  function applyShellTheme(isTen){
+    // Shell background visible on iOS rubber-band / PWA safe-area
+    const shell = isTen ? '#ffffff' : '#050814'; // 10 лет = light, 1 год = dark
+    document.documentElement.style.setProperty('--shell-bg', shell);
+    document.documentElement.style.backgroundColor = shell;
+    document.body.style.backgroundColor = shell;
+
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if(meta) meta.setAttribute('content', shell);
+  }
+
+  function applyIframeInsets(){
+    // Make cards not touch the phone edges (works for both pages)
+    const css = `
+      @media (max-width: 480px){
+        body{ padding-left: 14px !important; padding-right: 14px !important; }
+      }
+    `;
+    document.querySelectorAll('iframe.page').forEach((f)=>{
+      try{
+        const d = f.contentDocument;
+        if(!d || !d.head) return;
+        let st = d.getElementById('mobile-insets-fix');
+        if(!st){
+          st = d.createElement('style');
+          st.id = 'mobile-insets-fix';
+          d.head.appendChild(st);
+        }
+        st.textContent = css;
+        // Ensure iframe root doesn't flash white
+        d.documentElement.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--shell-bg') || '';
+      }catch(e){}
+    });
+  }
+
+  function setMode(isTen){
+    // Toggle visible page
+    if(page1) page1.classList.toggle('active', !!isTen);
+    if(page2) page2.classList.toggle('active', !isTen);
+
+    // Toggle shell theme class
+    document.body.classList.toggle('mode-light', !!isTen);
+    document.body.classList.toggle('mode-dark', !isTen);
+
+    setActiveUI(isTen);
+    applyShellTheme(isTen);
+    applyIframeInsets();
+  }
+
+  // Bottom tabs click
+  if(tab10) tab10.addEventListener('click', ()=>setMode(true));
+  if(tab1)  tab1.addEventListener('click',  ()=>setMode(false));
 
   // Keep in sync if user uses the top switcher
-  if(btn1) btn1.addEventListener('click', ()=>{setActive(true); document.body.classList.add('mode-dark'); document.body.classList.remove('mode-light');});
-  if(btn2) btn2.addEventListener('click', ()=>{setActive(false); document.body.classList.add('mode-dark'); document.body.classList.remove('mode-light');});
+  if(btn1) btn1.addEventListener('click', ()=>setTimeout(()=>setMode(true), 0));
+  if(btn2) btn2.addEventListener('click', ()=>setTimeout(()=>setMode(false), 0));
 
-  /* init theme */
+  // Also apply insets after iframes load
+  document.querySelectorAll('iframe.page').forEach((f)=>{
+    f.addEventListener('load', ()=>applyIframeInsets());
+  });
+
+  // Init
   try{
-    const isTenInit = (page1 && page1.classList.contains('active')) || (!page2 || !page2.classList.contains('active'));
-    document.body.classList.toggle('mode-light', !!isTenInit);
-    document.body.classList.toggle('mode-dark', !isTenInit);
-    setActive(!!isTenInit);
-  }catch(e){}
-
+    const isTenInit = isTenActive();
+    setMode(isTenInit);
+  }catch(e){
+    // Fallback: light shell
+    applyShellTheme(true);
+    applyIframeInsets();
+  }
 })();
 </script>
 </body>
