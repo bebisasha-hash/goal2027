@@ -181,18 +181,25 @@ body.mode-dark .page-title{
 </style>
 
 
-<style id="ios-bottom-mask">
-/* iOS rubber-band masking (visual transparency imitation) */
-body::after{
-  content:'';
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: env(safe-area-inset-bottom, 0px);
-  background: transparent;
-  pointer-events: none;
-  z-index: 2147483646;
+<style id="ios-no-parent-scroll">
+/* Prevent the outer shell from rubber-banding (iOS). Keep scrolling inside the iframe pages. */
+html, body{
+  height: 100%;
+  overflow: hidden;            /* stop page scroll */
+  -webkit-overflow-scrolling: auto;
+  overscroll-behavior: none;
+  background: var(--shell-bg, #ffffff);
+}
+body{
+  position: fixed;             /* critical for iOS standalone */
+  inset: 0;
+  width: 100%;
+}
+#pages{
+  height: 100%;
+}
+iframe{
+  height: 100%;
 }
 </style>
 
