@@ -156,46 +156,36 @@ body.mode-light .switcher-wrap .sw-btn{ opacity: 1 !important; }
 <link rel="manifest" href="manifest.webmanifest?v=5" />
 
 
-<!-- iOS PWA viewport fix: removes static bottom bar near home indicator by using the real visual viewport height -->
-<style id="ios-pwa-viewport-height-fix">
-  :root{ --app-height: 100vh; }
-  html, body{
-    margin:0 !important;
-    padding:0 !important;
-    width:100% !important;
-    height:100% !important;
-    overflow:hidden !important;           /* no outer scroll/bounce */
-    overscroll-behavior: none !important;
-    background: inherit;
-  }
-  body{ position: fixed !important; inset: 0 !important; }
+<!-- iOS PWA bottom hairline fix (1px): keeps the home-indicator safe-area effectively invisible -->
+<style id="ios-pwa-bottom-hairline-fix">
+  :root{ --ios-bottom-fix: 1px; }
 
-  /* Your "pages" are the iframes */
-  .page{
+  html, body{
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body{
+    position: fixed !important;
+    inset: 0 !important;
+    padding-bottom: 0 !important; /* NEVER add safe-area padding in the shell */
+  }
+
+  /* Your pages are the iframes */
+  iframe.page, .page{
     position: fixed !important;
     inset: 0 !important;
     width: 100% !important;
-    height: var(--app-height) !important; /* KEY */
     border: 0 !important;
-    background: transparent !important;   /* let inner page paint */
+    /* KEY: shrink by (safe-area - 1px) so any remaining "bar" becomes a 1px hairline */
+    height: calc(100vh - env(safe-area-inset-bottom, 0px) + var(--ios-bottom-fix)) !important;
   }
 </style>
-<script id="ios-pwa-viewport-height-fix-script">
-(function(){
-  function setAppHeight(){
-    var vv = window.visualViewport;
-    var h = vv && vv.height ? vv.height : window.innerHeight;
-    document.documentElement.style.setProperty('--app-height', h + 'px');
-  }
-  setAppHeight();
-  window.addEventListener('resize', setAppHeight, {passive:true});
-  window.addEventListener('orientationchange', setAppHeight, {passive:true});
-  if (window.visualViewport){
-    window.visualViewport.addEventListener('resize', setAppHeight, {passive:true});
-    window.visualViewport.addEventListener('scroll', setAppHeight, {passive:true});
-  }
-})();
-</script>
 
 </head>
 <body class="mode-light">
