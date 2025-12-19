@@ -8469,6 +8469,37 @@ header h1::before{
 &lt;meta content=&quot;width=device-width, initial-scale=1.0&quot; name=&quot;viewport&quot;/&gt;
 &lt;style&gt;
 
+/* === FORCE BLACK BACKGROUND (ALL LAYERS) === */
+html, body, #root, #app, .app, .page, .wrapper{
+  background-color: #050814 !important;
+  background: #050814 !important;
+}
+body{
+  min-height: 100svh;
+}
+@supports (height: 100svh){
+  body{ min-height: 100svh; }
+}
+
+/* === MOBILE: COMPACT CARDS SPACING === */
+@media (max-width: 420px){
+  .goals-grid,
+  .cards,
+  .grid{
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    gap: 10px !important;
+  }
+  .goal-card,
+  .card{
+    margin: 0 !important;
+    padding: 12px !important;
+    border-radius: 14px !important;
+  }
+}
+
+
+
 /* === MOBILE FIXES (dark) === */
 
 /* iOS: force black behind rubber-band overscroll */
