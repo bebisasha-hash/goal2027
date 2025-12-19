@@ -205,6 +205,26 @@ iframe{
 }
 </style>
 
+
+<style id="ios-vh-gap-fix">
+/* Fix 1px bottom gap on iOS by using dynamic viewport units */
+#pages{
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+}
+</style>
+
+
+<style id="ios-bottom-hairline-fix">
+html, body{
+  background: var(--shell-bg, #ffffff) !important;
+}
+</style>
+
 </head>
 <body class="mode-light">
   <div class="switcher-wrap" aria-label="Навигация страниц">
