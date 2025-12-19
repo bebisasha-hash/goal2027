@@ -226,11 +226,17 @@ html, body{
 </style>
 
 
-<style id="ios-bottom-gap-final">
-/* Remove any potential bottom hairline caused by safe-area padding in the outer shell */
+<style id="ios-iframe-inset-fix">
+/* Kill 1px hairline by forcing iframe to exactly cover the viewport box */
 #pages{
-  margin: 0 !important;
-  padding: 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+#pages iframe{
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 </style>
 
