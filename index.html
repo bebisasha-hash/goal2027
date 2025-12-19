@@ -16,7 +16,7 @@
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
-      top: calc(env(safe-area-inset-top, 0px) + 88px);
+      top: calc(env(safe-area-inset-top, 0px) + 44px);
       z-index: 999999;
       display: flex;
       flex-direction: column;
@@ -154,6 +154,31 @@ body.mode-light .switcher-wrap .sw-btn{ opacity: 1 !important; }
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=5" />
 
 <link rel="manifest" href="manifest.webmanifest?v=5" />
+
+
+<style id="ios-standalone-fix">
+html, body {
+  height: 100%;
+  background: #ffffff;
+  overscroll-behavior: none;
+}
+body {
+  margin: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+</style>
+
+
+<style id="dark-title-fix">
+/* Remove outline/glow from title on dark site */
+body.mode-dark h1,
+body.mode-dark .title,
+body.mode-dark .page-title{
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  filter: none !important;
+}
+</style>
 
 </head>
 <body class="mode-light">
@@ -3012,7 +3037,7 @@ header{
 }
 &lt;/style&gt;
 
-&lt;style id=&quot;pwa-safe-top&quot;&gt;body{padding-top:calc(env(safe-area-inset-top, 0px) + 140px) !important;}&lt;/style&gt;
+&lt;style id=&quot;pwa-safe-top&quot;&gt;body{padding-top:calc(env(safe-area-inset-top, 0px) + 70px) !important;}&lt;/style&gt;
 &lt;/head&gt;
 
 &lt;body&gt;
@@ -8180,7 +8205,7 @@ header{
 }
 
 &lt;/style&gt;
-&lt;style id=&quot;pwa-safe-top&quot;&gt;body{padding-top:calc(env(safe-area-inset-top, 0px) + 140px) !important;}&lt;/style&gt;
+&lt;style id=&quot;pwa-safe-top&quot;&gt;body{padding-top:calc(env(safe-area-inset-top, 0px) + 70px) !important;}&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 &lt;header&gt;
