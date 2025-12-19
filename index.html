@@ -164,8 +164,8 @@ html, body {
 }
 body {
   margin: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-
 </style>
 
 
@@ -181,43 +181,27 @@ body.mode-dark .page-title{
 </style>
 
 
-<style id="ios-no-parent-scroll">
-/* Prevent the outer shell from rubber-banding (iOS). Keep scrolling inside the iframe pages. */
+<style id="ios-shell-stable-fix">
+/* Stable PWA shell: no page scroll, scrolling stays inside iframes */
 html, body{
   height: 100%;
-  overflow: hidden;            /* stop page scroll */
-  -webkit-overflow-scrolling: auto;
-  overscroll-behavior: none;
+  margin: 0;
   background: var(--shell-bg, #ffffff);
+  overscroll-behavior: none;
 }
 body{
-  position: fixed;             /* critical for iOS standalone */
-  inset: 0;
+  overflow: hidden; /* prevents rubber-band on the outer page */
+  -webkit-overflow-scrolling: auto;
+}
+#pages{
+  height: 100vh; /* reliable on iOS Safari/PWA */
+}
+iframe{
+  height: 100%;
   width: 100%;
-}
-#pages{
-  height: 100%;
-}
-iframe{
-  height: 100%;
-}
-</style>
-
-
-<style id="ios-no-gap-fix">
-/* Eliminate bottom gap: make pages + iframes fill the fixed viewport */
-#pages{
-  position: absolute !important;
-  inset: 0 !important;
-  height: 100% !important;
-}
-iframe{
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  display: block !important;
-  border: 0 !important;
+  display: block;
+  border: 0;
+  background: transparent;
 }
 </style>
 
