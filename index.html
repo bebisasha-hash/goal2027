@@ -240,6 +240,91 @@ html, body{
 }
 </style>
 
+<style id="bottom-tabs">
+/* Bottom full-width bar to visually cover iOS home-indicator zone */
+.bottom-tabs{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2147483647;
+  pointer-events: auto;
+}
+
+/* Full-width bar */
+.bottom-tabs .tabs-inner{
+  width: 100%;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  align-items: center;
+  padding: 10px 12px calc(env(safe-area-inset-bottom, 0px) + 10px);
+  background: rgba(255,255,255,0.96);
+  border-top: 1px solid rgba(17,24,39,0.10);
+  box-shadow: 0 -10px 28px rgba(17,24,39,0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+body.mode-dark .bottom-tabs .tabs-inner{
+  background: rgba(0,0,0,0.72);
+  border-top: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 -12px 30px rgba(0,0,0,0.45);
+}
+
+/* Tab buttons */
+.tab-btn{
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: #0b0f19;
+  padding: 6px 4px;
+  font: 600 12px/1.1 system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+  cursor: pointer;
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  gap:4px;
+  transition: opacity .12s ease, transform .12s ease, color .12s ease;
+}
+
+body.mode-dark .tab-btn{ color: rgba(255,255,255,0.85); }
+
+.tab-btn:active{ transform: translateY(1px) scale(0.98); }
+
+.tab-btn .ico{
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size: 12px;
+  font-weight: 800;
+  background: rgba(255,63,147,0.12);
+  color: rgba(194,24,91,0.95);
+}
+
+body.mode-dark .tab-btn .ico{
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,79,191,0.95);
+}
+
+.tab-btn.active{
+  color: rgba(255,63,147,0.95);
+}
+
+.tab-btn.active .ico{
+  background: linear-gradient(135deg, #ff6aa8, #ff3f93);
+  color: #ffffff;
+}
+
+/* Reserve space so content isn't hidden */
+body{
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 64px) !important;
+}
+</style>
+
 </head>
 <body class="mode-light">
   <div class="switcher-wrap" aria-label="Навигация страниц">
@@ -10604,5 +10689,59 @@ header{
   }
 </script>
 
+
+  <nav class="bottom-tabs" aria-label="Нижнее меню">
+    <div class="tabs-inner" role="tablist" aria-label="Разделы">
+      <button class="tab-btn active" id="tab-10" type="button" role="tab" aria-selected="true">
+        <span class="ico">10</span><span>10 лет</span>
+      </button>
+      <button class="tab-btn" id="tab-1" type="button" role="tab" aria-selected="false">
+        <span class="ico">1</span><span>1 год</span>
+      </button>
+    </div>
+  </nav>
+<script id="bottom-tabs-js">
+(function(){
+  const tab10 = document.getElementById('tab-10');
+  const tab1  = document.getElementById('tab-1');
+  const btn1  = document.getElementById('btn-page-1'); // existing top switcher 10
+  const btn2  = document.getElementById('btn-page-2'); // existing top switcher 1
+  const page1 = document.getElementById('page-1');
+  const page2 = document.getElementById('page-2');
+
+  function setActive(isTen){
+    tab10.classList.toggle('active', !!isTen);
+    tab1.classList.toggle('active', !isTen);
+    tab10.setAttribute('aria-selected', !!isTen);
+    tab1.setAttribute('aria-selected', !isTen);
+  }
+
+  function showPage(isTen){
+    // Prefer clicking existing buttons if handlers exist
+    if(isTen){
+      if(btn1) btn1.click();
+      else{
+        if(page1) page1.classList.add('active');
+        if(page2) page2.classList.remove('active');
+      }
+      setActive(true);
+    }else{
+      if(btn2) btn2.click();
+      else{
+        if(page2) page2.classList.add('active');
+        if(page1) page1.classList.remove('active');
+      }
+      setActive(false);
+    }
+  }
+
+  if(tab10) tab10.addEventListener('click', ()=>showPage(true));
+  if(tab1)  tab1.addEventListener('click',  ()=>showPage(false));
+
+  // Keep in sync if user uses the top switcher
+  if(btn1) btn1.addEventListener('click', ()=>setActive(true));
+  if(btn2) btn2.addEventListener('click', ()=>setActive(false));
+})();
+</script>
 </body>
 </html>
