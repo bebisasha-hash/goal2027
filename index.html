@@ -164,7 +164,7 @@ html, body {
 }
 body {
   margin: 0;
-  padding-bottom: 0; /* overridden: no safe-area padding */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 </style>
 
@@ -241,68 +241,40 @@ html, body{
 </style>
 
 
-<style id="ios-bottom-no-bar-aggressive">
-/* === iOS PWA AGGRESSIVE: remove any visible bottom bar/gap completely ===
-   Strategy:
-   1) Make html/body transparent so any compositor "seam" doesn't show as a colored strip.
-   2) Put all real background on #pages (the fixed shell).
-   3) Use visual viewport height (JS) to size the shell exactly, avoiding 1px gaps.
-   4) Disable safe-area bottom padding on body to prevent reserved colored area.
+<style id="ios-safearea-cover-fix">
+/* === iOS PWA: cover the home-indicator area instead of reserving it ===
+   This removes the visible bottom bar by letting the fixed iframes extend
+   *under* the safe-area, while keeping the background consistent.
 */
 html, body{
   height: 100%;
   margin: 0;
   overflow: hidden;
-  background: transparent !important;
-  overscroll-behavior: none;
+  background: var(--shell-bg, #ffffff) !important;
 }
 body{
-  padding-bottom: 0 !important;
+  padding-bottom: 0 !important; /* disable reserved safe-area padding */
 }
 
-/* The app shell */
-#pages{
+/* Our "pages" are the iframes themselves (.page).
+   Extend them below the viewport by the safe-area height to fully cover the gap. */
+.page{
   position: fixed !important;
-  left: 0; right: 0; top: 0; bottom: 0;
-  height: var(--vvh, 100dvh) !important;
-  width: 100%;
-  overflow: hidden !important;
-  background: var(--shell-bg, #ffffff) !important; /* single source of background */
-}
-
-/* Ensure iframes fill perfectly */
-#pages iframe{
-  position: absolute !important;
-  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: calc(-1 * env(safe-area-inset-bottom, 0px)) !important;
   width: 100% !important;
-  height: 100% !important;
   border: 0 !important;
-  background: transparent !important;
+  background: var(--shell-bg, #ffffff) !important;
 }
 
-/* Prevent tap-highlight seams */
-*{ -webkit-tap-highlight-color: transparent; }
+/* Avoid 1px compositor seams */
+.page, .page *{
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
 </style>
-
-<script id="ios-visual-viewport-height">
-(function(){
-  function setVVH(){
-    try{
-      var vv = window.visualViewport;
-      var h = (vv && vv.height) ? vv.height : window.innerHeight;
-      // Round to whole px to avoid subpixel seams (1px lines)
-      h = Math.round(h);
-      document.documentElement.style.setProperty('--vvh', h + 'px');
-    }catch(e){}
-  }
-  setVVH();
-  window.addEventListener('resize', setVVH, {passive:true});
-  if(window.visualViewport){
-    window.visualViewport.addEventListener('resize', setVVH, {passive:true});
-    window.visualViewport.addEventListener('scroll', setVVH, {passive:true});
-  }
-})();
-</script>
 
 </head>
 <body class="mode-light">
