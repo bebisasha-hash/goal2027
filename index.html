@@ -240,58 +240,8 @@ html, body{
 }
 </style>
 
-
-<style id="ios-bottom-cover-overlay">
-/* Variant 3: keep layout as-is, but cover the iOS safe-area with an overlay matching theme */
-html, body{
-  height: 100%;
-  margin: 0;
-  overflow: hidden;
-  background: transparent !important;
-}
-#pages{
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100dvh;
-  height: 100svh;
-  height: 100vh;
-  overflow: hidden;
-  background: var(--shell-bg, #ffffff) !important;
-}
-/* the cover that hides any white/black bar area */
-#iosSafeAreaCover{
-  position: fixed;
-  left: 0; right: 0; bottom: 0;
-  height: env(safe-area-inset-bottom, 0px);
-  background: var(--shell-bg, #ffffff);
-  pointer-events: none;
-  z-index: 2147483646;
-}
-/* avoid seams */
-#pages, .page{ transform: translateZ(0); -webkit-transform: translateZ(0); }
-</style>
-
-<script id="ios-shell-bg-sync">
-(function(){
-  function sync(){
-    // Prefer explicit classes if present
-    var b = document.body;
-    var isDark = b.classList.contains('mode-dark') || b.classList.contains('dark');
-    var bg = isDark ? '#050814' : '#ffffff';
-    document.documentElement.style.setProperty('--shell-bg', bg);
-  }
-  sync();
-  // also run when toggling tabs/buttons
-  document.addEventListener('click', function(e){
-    if(e.target && e.target.classList && e.target.classList.contains('sw-btn')) sync();
-  }, {passive:true});
-})();
-</script>
-
 </head>
 <body class="mode-light">
-  <div id="iosSafeAreaCover" aria-hidden="true"></div>
   <div class="switcher-wrap" aria-label="Навигация страниц">
     <div class="switcher" role="tablist" aria-label="Переключатель страниц">
       <button class="sw-btn active" id="btn-page-1" type="button" role="tab" aria-selected="true" data-title="10 лет">10</button>
