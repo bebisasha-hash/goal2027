@@ -8469,6 +8469,55 @@ header h1::before{
 &lt;meta content=&quot;width=device-width, initial-scale=1.0&quot; name=&quot;viewport&quot;/&gt;
 &lt;style&gt;
 
+/* === MOBILE FIXES (dark) === */
+
+/* 1) Prevent white overscroll background on iOS/phones */
+html, body{
+  background: #050814 !important;
+  background-color: #050814 !important;
+}
+body{
+  min-height: 100vh;
+  overscroll-behavior-y: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Some containers may paint white when rubber-banding */
+#app, .app, .page, .container{
+  background: transparent !important;
+}
+
+/* 2) Title should wrap to 2 lines instead of clipping */
+header h1{
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  hyphens: auto !important;
+  max-width: 92vw !important;
+}
+@media (max-width: 420px){
+  header h1{
+    font-size: 1.65rem !important;
+    line-height: 1.15 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+/* 3) Pink line should be responsive, not clipped */
+.title-pink-line{
+  width: min(640px, 92vw) !important;
+  max-width: 92vw !important;
+}
+/* Ensure nothing clips the line */
+header, .topbar, .header, .header-wrap{
+  overflow: visible !important;
+}
+
+
+
 /* FINAL: calm gray tag pills (same for all tags) */
 .goal-tag{
   background: rgba(255,255,255,0.08) !important;
@@ -9935,7 +9984,7 @@ header h1::after{ content:none !important; display:none !important; }
 &lt;div class=&quot;card&quot; data-goal=&quot;income&quot; data-sphere=&quot;money&quot;&gt;
 &lt;div class=&quot;card-inner&quot;&gt;
 &lt;div class=&quot;card-header&quot;&gt;
-&lt;div class=&quot;card-title&quot;&gt;Доход&lt;span class=&quot;goal-tag&quot;&gt;эффективность&lt;/span&gt;&lt;/div&gt;
+&lt;div class=&quot;card-title&quot;&gt;Доход&lt;span class=&quot;goal-tag&quot;&gt;деньги&lt;/span&gt;&lt;/div&gt;
 &lt;button class=&quot;daily-check&quot; title=&quot;Отметить, что сегодня работала над этой целью&quot; type=&quot;button&quot;&gt;
 &lt;span class=&quot;daily-check-circle&quot;&gt;&lt;/span&gt;
 &lt;/button&gt;
