@@ -8471,8 +8471,21 @@ header h1::before{
 
 /* === MOBILE FIXES (dark) === */
 
+/* iOS: force black behind rubber-band overscroll */
+body::before{
+  content:&quot;&quot;;
+  position: fixed;
+  inset: 0;
+  background: #050814;
+  z-index: -1;
+}
+html{
+  background: #050814 !important;
+}
+
+
 /* 1) Prevent white overscroll background on iOS/phones */
-html, body{
+html, body{ background:#050814 !important; background-color:#050814 !important;
   background: #050814 !important;
   background-color: #050814 !important;
 }
@@ -8492,9 +8505,9 @@ header h1{
   white-space: normal !important;
   overflow: visible !important;
   text-overflow: clip !important;
-  overflow-wrap: anywhere !important;
-  word-break: break-word !important;
-  hyphens: auto !important;
+  overflow-wrap: normal !important;   /* don&#x27;t split words */
+  word-break: normal !important;      /* don&#x27;t split words */
+  hyphens: manual !important;         /* no auto hyphenation */
   max-width: 92vw !important;
 }
 @media (max-width: 420px){
@@ -8537,9 +8550,10 @@ header h1{
   white-space: normal !important;
   overflow: visible !important;
   text-overflow: clip !important;
-  overflow-wrap: anywhere !important;
-  word-break: break-word !important;
-  hyphens: auto !important;
+  overflow-wrap: normal !important;   /* don&#x27;t split words */
+  word-break: normal !important;      /* don&#x27;t split words */
+  hyphens: manual !important;         /* no auto hyphenation */
+  max-width: 92vw !important;
 }
 @media (max-width: 420px){
   header h1{
