@@ -8,7 +8,7 @@
     html, body {
       height: 100%;
       margin: 0;
-      background: var(--shell-bg, #ffffff);
+      background: #ffffff;
           overscroll-behavior: none;
       background-color: #ffffff;
     }
@@ -16,7 +16,7 @@
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
-      top: calc(env(safe-area-inset-top, 0px) + 28px);
+      top: calc(env(safe-area-inset-top, 0px) + 88px);
       z-index: 999999;
       display: flex;
       flex-direction: column;
@@ -63,7 +63,7 @@
       height: 100%;
       border: 0;
       display: none;
-      background: var(--shell-bg, #ffffff);
+      background: #ffffff;
     }
     .page.active { display: block; }
 
@@ -154,152 +154,6 @@ body.mode-light .switcher-wrap .sw-btn{ opacity: 1 !important; }
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=5" />
 
 <link rel="manifest" href="manifest.webmanifest?v=5" />
-
-
-<style id="ios-standalone-fix">
-html, body {
-  height: 100%;
-  background: var(--shell-bg, #ffffff);
-  overscroll-behavior: none;
-}
-body {
-  margin: 0;
-  padding-bottom: 0; /* removed safe-area padding to avoid bottom bar */
-}
-</style>
-
-
-<style id="dark-title-fix">
-/* Remove outline/glow from title on dark site */
-body.mode-dark h1,
-body.mode-dark .title,
-body.mode-dark .page-title{
-  text-shadow: none !important;
-  -webkit-text-stroke: 0 !important;
-  filter: none !important;
-}
-</style>
-
-
-<style id="ios-shell-stable-fix">
-/* Stable PWA shell: no page scroll, scrolling stays inside iframes */
-html, body{
-  height: 100%;
-  margin: 0;
-  background: var(--shell-bg, #ffffff);
-  overscroll-behavior: none;
-}
-body{
-  overflow: hidden; /* prevents rubber-band on the outer page */
-  -webkit-overflow-scrolling: auto;
-}
-#pages{
-  height: 100vh; /* reliable on iOS Safari/PWA */
-}
-iframe{
-  height: 100%;
-  width: 100%;
-  display: block;
-  border: 0;
-  background: transparent;
-}
-</style>
-
-
-<style id="ios-vh-gap-fix">
-/* Fix 1px bottom gap on iOS by using dynamic viewport units */
-#pages{
-  height: 100vh;
-  height: 100svh;
-  height: 100dvh;
-  min-height: 100vh;
-  min-height: 100svh;
-  min-height: 100dvh;
-}
-</style>
-
-
-<style id="ios-bottom-hairline-fix">
-html, body{
-  background: var(--shell-bg, #ffffff) !important;
-}
-</style>
-
-
-<style id="ios-iframe-inset-fix">
-/* Kill 1px hairline by forcing iframe to exactly cover the viewport box */
-#pages{
-  position: relative !important;
-  overflow: hidden !important;
-}
-#pages iframe{
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-}
-</style>
-
-
-<style id="ios-bottom-bar-surgical-fix">
-/* Variant 4 (surgical): don't reserve bottom safe-area; instead keep shell background in sync with active page
-   so no contrasting bar is visible in iOS PWA. */
-html, body{
-  height: 100%;
-  margin: 0;
-  overflow: hidden;
-  background: var(--shell-bg, #ffffff) !important;
-  overscroll-behavior: none;
-}
-body{ padding-bottom: 0 !important; }
-
-/* Make sure the iframe itself paints the background (prevents revealing html/body seams) */
-.page{
-  background: var(--shell-bg, #ffffff) !important;
-}
-
-/* Use dynamic viewport units for the shell area (reduces iOS 1px seams) */
-#pages{
-  height: 100vh;
-  height: 100svh;
-  height: 100dvh;
-}
-</style>
-
-<script id="shell-bg-sync-active-page">
-(function(){
-  var DARK = '#050814';
-  var LIGHT = '#ffffff';
-
-  function setShellBg(bg){
-    document.documentElement.style.setProperty('--shell-bg', bg);
-    document.body.style.background = bg;
-  }
-
-  function syncFromActive(){
-    // page-1 is dark (10 years), page-2 is light (1 year)
-    var p1 = document.getElementById('page-1');
-    var p2 = document.getElementById('page-2');
-    var isP1Active = p1 && p1.classList.contains('active');
-    setShellBg(isP1Active ? DARK : LIGHT);
-  }
-
-  // initial sync
-  syncFromActive();
-
-  // sync on switcher clicks
-  document.addEventListener('click', function(e){
-    var t = e.target;
-    if(!t) return;
-    if(t.id === 'btn-page-1') setShellBg(DARK);
-    if(t.id === 'btn-page-2') setShellBg(LIGHT);
-  }, {passive:true});
-
-  // also resync after layout changes
-  window.addEventListener('pageshow', syncFromActive, {passive:true});
-  window.addEventListener('resize', syncFromActive, {passive:true});
-})();
-</script>
 
 </head>
 <body class="mode-light">
@@ -3158,7 +3012,7 @@ header{
 }
 &lt;/style&gt;
 
-&lt;style id=&quot;pwa-safe-top&quot;&gt;body{padding-top:calc(env(safe-area-inset-top, 0px) + 70px) !important;}&lt;/style&gt;
+&lt;style id=&quot;pwa-safe-top&quot;&gt;body{padding-top:calc(env(safe-area-inset-top, 0px) + 140px) !important;}&lt;/style&gt;
 &lt;/head&gt;
 
 &lt;body&gt;
@@ -8326,7 +8180,7 @@ header{
 }
 
 &lt;/style&gt;
-&lt;style id=&quot;pwa-safe-top&quot;&gt;body{padding-top:calc(env(safe-area-inset-top, 0px) + 70px) !important;}&lt;/style&gt;
+&lt;style id=&quot;pwa-safe-top&quot;&gt;body{padding-top:calc(env(safe-area-inset-top, 0px) + 140px) !important;}&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 &lt;header&gt;
@@ -10612,10 +10466,6 @@ header{
 
     function show(which) {
       const is1 = which === 1;
-      const shellBg = is1 ? '#ffffff' : '#0b0f19';
-      document.documentElement.style.setProperty('--shell-bg', shellBg);
-      document.documentElement.style.backgroundColor = shellBg;
-      document.body.style.backgroundColor = shellBg;
       p1.classList.toggle('active', is1);
       p2.classList.toggle('active', !is1);
 
