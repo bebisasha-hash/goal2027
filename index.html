@@ -8,7 +8,7 @@
     html, body {
       height: 100%;
       margin: 0;
-      background: #ffffff;
+      background: var(--shell-bg, #ffffff);
           overscroll-behavior: none;
       background-color: #ffffff;
     }
@@ -63,7 +63,7 @@
       height: 100%;
       border: 0;
       display: none;
-      background: #ffffff;
+      background: var(--shell-bg, #ffffff);
     }
     .page.active { display: block; }
 
@@ -159,7 +159,7 @@ body.mode-light .switcher-wrap .sw-btn{ opacity: 1 !important; }
 <style id="ios-standalone-fix">
 html, body {
   height: 100%;
-  background: #ffffff;
+  background: var(--shell-bg, #ffffff);
   overscroll-behavior: none;
 }
 body {
@@ -10491,6 +10491,10 @@ header{
 
     function show(which) {
       const is1 = which === 1;
+      const shellBg = is1 ? '#ffffff' : '#0b0f19';
+      document.documentElement.style.setProperty('--shell-bg', shellBg);
+      document.documentElement.style.backgroundColor = shellBg;
+      document.body.style.backgroundColor = shellBg;
       p1.classList.toggle('active', is1);
       p2.classList.toggle('active', !is1);
 
