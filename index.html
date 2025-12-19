@@ -21,7 +21,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 18px;
       padding: 0 14px;
       pointer-events: none; /* only inner controls clickable */
     }
@@ -67,9 +67,11 @@
     }
     .page.active { display: block; }
 
+
     /* Keep switcher clickable even if iframes have overlays */
     .switcher * { pointer-events: auto; }
   
+
 
 /* PERF FIX: unify card title color with light theme */
 body.dark .card-title{ color:#1f2937 !important; }
@@ -86,6 +88,7 @@ body.dark .card-title{ color:#1f2937 !important; }
 
     body.mode-dark 
 </style>
+
 
 
 
@@ -132,11 +135,13 @@ body.mode-light .switcher-wrap .sw-btn.active{
 }
 </style>
 
+
 <style id="switcher-visibility-fix">
 .switcher-wrap{ z-index: 2147483647 !important; }
 .switcher-wrap .switcher{ background-clip: padding-box; }
 body.mode-light .switcher-wrap .sw-btn{ opacity: 1 !important; }
 </style>
+
 
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -150,6 +155,7 @@ body.mode-light .switcher-wrap .sw-btn{ opacity: 1 !important; }
 
 <link rel="manifest" href="manifest.webmanifest?v=5" />
 
+
 <style id="ios-standalone-fix">
 html, body {
   height: 100%;
@@ -162,6 +168,7 @@ body {
 }
 </style>
 
+
 <style id="dark-title-fix">
 /* Remove outline/glow from title on dark site */
 body.mode-dark h1,
@@ -172,6 +179,7 @@ body.mode-dark .page-title{
   filter: none !important;
 }
 </style>
+
 
 <style id="ios-shell-stable-fix">
 /* Stable PWA shell: no page scroll, scrolling stays inside iframes */
@@ -197,6 +205,7 @@ iframe{
 }
 </style>
 
+
 <style id="ios-vh-gap-fix">
 /* Fix 1px bottom gap on iOS by using dynamic viewport units */
 #pages{
@@ -209,11 +218,13 @@ iframe{
 }
 </style>
 
+
 <style id="ios-bottom-hairline-fix">
 html, body{
   background: var(--shell-bg, #ffffff) !important;
 }
 </style>
+
 
 <style id="ios-iframe-inset-fix">
 /* Kill 1px hairline by forcing iframe to exactly cover the viewport box */
@@ -246,8 +257,8 @@ html, body{
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 18px;
-  padding: 10px 12px calc(env(safe-area-inset-bottom, 0px) + 10px);
+  gap: 20px;
+  padding: 6px 0 calc(env(safe-area-inset-bottom, 0px) + 6px);
   background: rgba(255,255,255,0.96);
   border-top: 1px solid rgba(17,24,39,0.10);
   box-shadow: 0 -10px 28px rgba(17,24,39,0.08);
@@ -263,11 +274,13 @@ body.mode-dark .bottom-tabs .tabs-inner{
 
 /* Tab buttons */
 .tab-btn{
+  min-width: 84px;
+
   appearance: none;
   border: none;
   background: transparent;
   color: #0b0f19;
-  padding: 6px 0px;
+  padding: 6px 4px;
   font: 600 12px/1.1 system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
   cursor: pointer;
   display:flex;
@@ -277,13 +290,13 @@ body.mode-dark .bottom-tabs .tabs-inner{
   transition: opacity .12s ease, transform .12s ease, color .12s ease;
 }
 
-body.mode-dark .tab-btn{ color: rgba(255,255,255,0.85); }
+body.mode-dark .tab-btn{ color: #0b0f19; }
 
 .tab-btn:active{ transform: translateY(1px) scale(0.98); }
 
 .tab-btn .ico{
-  width: 22px;
-  height: 22px;
+  width: 21px;
+  height: 21px;
   border-radius: 7px;
   display:inline-flex;
   align-items:center;
@@ -295,8 +308,8 @@ body.mode-dark .tab-btn{ color: rgba(255,255,255,0.85); }
 }
 
 body.mode-dark .tab-btn .ico{
-  background: rgba(255,255,255,0.08);
-  color: rgba(255,79,191,0.95);
+  background: rgba(255,63,147,0.12);
+  color: rgba(194,24,91,0.95);
 }
 
 .tab-btn.active{
@@ -312,11 +325,184 @@ body.mode-dark .tab-btn .ico{
 body{
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 64px) !important;
 }
+
+/* Active tab label color (pink) on dark/black bar */
+body.mode-light .bottom-tabs .tab-btn.active{
+  color: rgba(255,79,191,0.98) !important;
+}
+/* Keep non-active readable on black bar */
+body.mode-light .bottom-tabs .tab-btn{
+  color: rgba(255,255,255,0.86) !important;
+}
+
+/* Active tab label color (pink) on light/white bar (dark site) too */
+body.mode-dark .bottom-tabs .tab-btn.active{
+  color: rgba(255,79,191,0.98) !important;
+}
+<style id="v14-native-tabs">
+/* Make tabs feel like native: inactive muted, active accent + slight lift */
+.bottom-tabs .tab-btn{
+  opacity: 0.75;
+  transform: translateY(0);
+  transition: opacity 160ms ease, transform 160ms ease, filter 160ms ease;
+}
+
+.bottom-tabs .tab-btn .ico{
+  transition: transform 160ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease, filter 180ms ease;
+  filter: saturate(0.85);
+}
+
+.bottom-tabs .tab-btn.active{
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+/* Active icon: slightly larger + glow */
+.bottom-tabs .tab-btn.active .ico{
+  transform: scale(1.07);
+  filter: saturate(1.25);
+  box-shadow:
+    0 10px 26px rgba(255,63,147,0.26),
+    0 0 0 2px rgba(255,63,147,0.12);
+}
+
+/* Inactive icon: smaller and calmer */
+.bottom-tabs .tab-btn:not(.active) .ico{
+  transform: scale(0.98);
+  box-shadow: none;
+}
+
+/* Text behavior (when labels exist): inactive muted, active stronger */
+.bottom-tabs .tab-btn > span:last-child{
+  opacity: 0.72;
+  transform: translateY(0);
+  transition: opacity 160ms ease, transform 160ms ease, color 160ms ease;
+}
+.bottom-tabs .tab-btn.active > span:last-child{
+  opacity: 1;
+  transform: translateY(-0.5px);
+}
+
+/* Theme-aware tuning */
+body.mode-light .bottom-tabs .tab-btn:not(.active){
+  opacity: 0.62; /* black bar */
+}
+body.mode-light .bottom-tabs .tab-btn:not(.active) .ico{
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.78);
+  filter: saturate(0.75);
+}
+
+/* White bar (dark site): inactive should be subtle gray */
+body.mode-dark .bottom-tabs .tab-btn:not(.active){
+  opacity: 0.70;
+}
+body.mode-dark .bottom-tabs .tab-btn:not(.active) .ico{
+  background: rgba(17,24,39,0.06);
+  border: 1px solid rgba(17,24,39,0.12);
+  color: rgba(11,15,25,0.65);
+  filter: saturate(0.8);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .bottom-tabs .tab-btn,
+  .bottom-tabs .tab-btn .ico,
+  .bottom-tabs .tab-btn > span:last-child{
+    transition: none !important;
+  }
+}
 </style>
 
+</style>
+
+
+
+<style id="v19-dark-10-gray-final">
+/* FINAL: DARK SITE — text "10 лет" is soft gray (readable, native-like) */
+body.mode-dark .bottom-tabs #tab-10 > span:last-child{
+  color: rgba(255,255,255,0.65) !important;
+}
+</style>
+<style id="v20-white-label-visibility-fix">
+/* WHITE SITE: ensure labels are visible and readable */
+body.mode-light .bottom-tabs #tab-10 > span:last-child,
+body.mode-light .bottom-tabs #tab-1 > span:last-child{
+  display: inline !important;
+  opacity: 1 !important;
+  color: rgba(11,15,25,0.72) !important; /* readable native-like gray */
+}
+</style>
+<style id="v23-no-inversion-labels">
+.bottom-tabs .tab-btn > span:last-child{
+  display: inline !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+  font-size: 12px !important;
+  font-weight: 650 !important;
+  letter-spacing: 0.2px !important;
+  line-height: 1.05 !important;
+}
+
+/* White bar */
+body.mode-light .bottom-tabs .tab-btn > span:last-child{
+  color: rgba(11,15,25,0.82) !important;
+  text-shadow: none !important;
+}
+
+/* Black bar */
+body.mode-dark .bottom-tabs .tab-btn > span:last-child{
+  color: rgba(255,255,255,0.82) !important;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.22) !important;
+}
+
+/* Dark site: "10 лет" slightly calmer gray, still readable */
+body.mode-dark .bottom-tabs #tab-10 > span:last-child{
+  color: rgba(255,255,255,0.70) !important;
+}
+</style>
+<style id="v27-icon-visibility-fix-strong">
+/* === ICON VISIBILITY FIX (STRONG SPECIFICITY) === */
+
+/* WHITE SITE (mode-light): panel is white -> inactive icons must be DARK */
+body.mode-light .bottom-tabs .tab-btn:not(.active) .ico{
+  background: rgba(11,15,25,0.06) !important;
+  border: 1px solid rgba(11,15,25,0.14) !important;
+  color: rgba(11,15,25,0.88) !important;
+  filter: saturate(0.95) !important;
+  box-shadow: none !important;
+}
+
+/* WHITE SITE active */
+body.mode-light .bottom-tabs .tab-btn.active .ico{
+  background: linear-gradient(135deg, #ff6aa8, #ff3f93) !important;
+  border: 1px solid rgba(255,63,147,0.55) !important;
+  color: #ffffff !important;
+}
+
+/* DARK SITE (mode-dark): panel is black -> inactive icons must be LIGHT */
+body.mode-dark .bottom-tabs .tab-btn:not(.active) .ico{
+  background: rgba(255,255,255,0.08) !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  color: rgba(255,255,255,0.90) !important;
+  filter: saturate(0.95) !important;
+  box-shadow: none !important;
+}
+
+/* DARK SITE active */
+body.mode-dark .bottom-tabs .tab-btn.active .ico{
+  background: linear-gradient(135deg, #ff6aa8, #ff3f93) !important;
+  border: 1px solid rgba(255,63,147,0.55) !important;
+  color: #ffffff !important;
+}
+</style>
 </head>
 <body class="mode-light">
-<iframe class="page active" id="page-1" title="Проект: новая реальность" srcdoc="&lt;!DOCTYPE html&gt;
+  </div>
+
+  <iframe class="page active" id="page-1" title="Проект: новая реальность" srcdoc="&lt;!DOCTYPE html&gt;
 
 &lt;html lang=&quot;ru&quot;&gt;
 &lt;head&gt;
@@ -348,7 +534,7 @@ body{
       background: radial-gradient(circle at top left, #1e293b 0, #020617 55%);
       color: var(--text-main);
       min-height: 100vh;
-      padding: 16px;
+      padding: 6px;
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -356,10 +542,10 @@ body{
     header {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 18px;
       align-items: center;
       text-align: center;
-      margin-top: 10px; margin-bottom: 4px;
+      margin-top: 2px; margin-bottom: 4px;
     }
     header h1 {
       font-size: 1.9rem;
@@ -393,7 +579,7 @@ body{
       justify-content: center;
       align-items: center;
       width: 100%;
-      margin-top: 10px;
+      margin-top: 6px;
       margin-bottom: 5px;
     }
 
@@ -546,7 +732,7 @@ body{
     .progress-wrap {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 18px;
     }
     
 .progress-circle {
@@ -686,7 +872,7 @@ body{
     .card-total .progress-wrap {
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 18px;
     }
     .card-total .progress-circle {
       width: 150px;
@@ -729,6 +915,7 @@ body{
     .tag-body { background: rgba(168,85,247,0.18); color:#d8b4fe; border-color: rgba(168,85,247,0.45);} 
     .tag-dev { background: rgba(253,224,71,0.18); color:#fde68a; border-color: rgba(253,224,71,0.45);} 
 
+
 .filter-bar {
   margin-top: 6px;
   display:flex;
@@ -754,6 +941,7 @@ body{
   display:none !important;
 }
 
+
 /* Убираем стрелки у number input */
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
@@ -763,6 +951,7 @@ input[type=number]::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
 
 /* ===== Dark pink theme (override) ===== */
 :root{
@@ -932,6 +1121,7 @@ button.secondary{
 
 
 
+
 /* ===== Corner buttons alignment (checkpoint + info) ===== */
 /* Pin the checkpoint to the same x as the info button */
 .card:not(.card-total) .daily-check{
@@ -990,6 +1180,7 @@ button.secondary{
 }
 /* ===== end corner buttons alignment ===== */
 
+
 /* ===== Notes modal (per-goal) ===== */
 .notes-modal-overlay{
   position: fixed;
@@ -1028,13 +1219,13 @@ button.secondary{
   padding: 18px 18px 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 18px;
 }
 .notes-modal-top{
   display:flex;
   align-items:flex-start;
   justify-content: space-between;
-  gap: 10px;
+  gap: 18px;
 }
 .notes-modal-title{
   font-size: 1.05rem;
@@ -1080,6 +1271,7 @@ button.secondary{
   color: rgba(17,24,39,0.35);
 }
 
+
 /* Rich notes editor (contenteditable) */
 .notes-editor{
   width: 100%;
@@ -1111,6 +1303,7 @@ button.secondary{
   font-style: italic;
   font-weight: 500;
 }
+
 
 .notes-modal-actions{
   display:flex;
@@ -1144,6 +1337,7 @@ button.secondary{
   display:flex;
 }
 /* ===== end notes modal ===== */
+
 
 /* ===== Notes modal refinements ===== */
 .notes-modal-overlay{
@@ -1191,6 +1385,7 @@ button.secondary{
 }
 /* ===== end refinements ===== */
 
+
 /* ===== FIX popup animation (use opacity/visibility instead of display) ===== */
 .notes-modal-overlay{
   display: flex;
@@ -1205,6 +1400,7 @@ button.secondary{
   opacity: 1;
 }
 /* ===== end fix ===== */
+
 
 /* ===== Close animation for notes popup ===== */
 .notes-modal-overlay{
@@ -1226,6 +1422,7 @@ button.secondary{
   opacity: 0;
 }
 /* ===== end close animation ===== */
+
 
 /* ===== Theme overrides (neutral dark, less pink, KEEP depth) ===== */
 :root{
@@ -1363,6 +1560,7 @@ button.primary:hover, .btn-primary:hover, .primary:hover{
   --tw-ring-color: rgba(212,74,130,.14);
 }
 
+
 /* ===== Requested tweaks (checkpoint done color + remove white tap flash) ===== */
 /* 1) Daily checkpoint state=2 (✓) — match site rose style (no green) */
 .daily-check[data-state=&quot;2&quot;] .daily-check-circle{
@@ -1396,6 +1594,7 @@ button:focus-visible{
 }
 /* ===== end tweaks ===== */
 
+
 /* === FIX v16: убираем артефакт белой полосы при наведении на чекпоинт ===
    Источник: backdrop-filter на .card даёт compositing seam в Chrome/Safari при hover/анимациях вложенных элементов.
    Решение: отключаем backdrop-filter на карточках и изолируем их от перерисовки.
@@ -1405,6 +1604,7 @@ button:focus-visible{
   backdrop-filter: none !important;
   contain: paint;
 }
+
 
 
 /* === FIX v16: убираем белую вертикальную полосу/блик при наведении на чекпоинт ===
@@ -1417,6 +1617,7 @@ button:focus-visible{
   contain: paint;
 }
 
+
 /* ===== v17 tweaks: hover scale + header spacing + custom total input modal ===== */
 .card:not(.card-total):hover{
   transform: translateY(-2px) scale(1.02);
@@ -1424,7 +1625,7 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 14px !important;
+  margin-top: 2px !important;
   margin-bottom: 0px !important;
   gap: 6px !important;
 }
@@ -1476,13 +1677,13 @@ header{
   padding: 18px 18px 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 18px;
 }
 .set-modal-top{
   display:flex;
   align-items:flex-start;
   justify-content: space-between;
-  gap: 10px;
+  gap: 18px;
 }
 .set-modal-title{
   font-size: 1.02rem;
@@ -1540,9 +1741,11 @@ header{
 }
 /* ===== end v17 tweaks ===== */
 
+
 /* === FIX: remove square glow around progress container === */
 .progress-circle{ filter: none !important; }
 .progress-circle svg{ filter: none !important; }
+
 
 /* === FIX v4: remove ANY filter-based glow that can render as a square while progress animates === */
 .progress-circle,
@@ -1552,6 +1755,7 @@ header{
   filter: none !important;
   -webkit-filter: none !important;
 }
+
 
 /* ===============================
    LIGHT LUXURY THEME (white / blush / black)
@@ -1787,6 +1991,7 @@ header h1{
   color: #0b0f19 !important;
 }
 
+
 /* === TRUE TEXT-ONLY HEADER: remove any container visuals === */
 header,
 .header,
@@ -1814,6 +2019,7 @@ header h1{
   border-radius: 0 !important;
   color: #0b0f19 !important;
 }
+
 
 /* === HEADER: subtle outline + underline, no shadows === */
 header h1{
@@ -1850,6 +2056,7 @@ header h1::after{
   text-shadow: none !important;
   filter: none !important;
 }
+
 
 /* === HEADER PRETTY (site-style, no shadows) === */
 header{
@@ -1894,6 +2101,7 @@ header h1::after{
   box-shadow: none !important;
   filter: none !important;
 }
+
 
 /* === HEADER LUXURY: editorial text + hairline brand underline (no pill, no shadows) === */
 header{
@@ -1954,6 +2162,7 @@ header h1::after{
   }
 }
 
+
 /* === FINAL FIX: keep notes save button pink on hover (inside page) === */
 .notes-btn:hover{
   background: linear-gradient(135deg, var(--pink-1), var(--pink-2)) !important;
@@ -1964,6 +2173,10 @@ header h1::after{
   background: linear-gradient(135deg, var(--pink-2), var(--pink-1)) !important;
 }
 
+
+
+/* Reserve space so cards are not hidden behind bottom tab bar */
+body{ padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 120px) !important; }
 &lt;/style&gt;
 
 &lt;style&gt;
@@ -1991,6 +2204,7 @@ header h1::after{
 /* ===== end progress contrast ===== */
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* FINAL FORCE: make circular progress track visible (light gray) */
 .progress-circle svg circle.bg-circle,
@@ -1999,6 +2213,7 @@ circle.bg-circle,
   stroke: rgba(11,15,25,.22);
 }
 &lt;/style&gt;
+
 
 &lt;style&gt;
 /* ===============================
@@ -2063,6 +2278,7 @@ html, body{
   transform: scale(0.94) !important;
 }
 &lt;/style&gt;
+
 
 &lt;style&gt;
 /* ===============================
@@ -2162,6 +2378,7 @@ body::after{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* ===== FINAL FIXES v3 ===== */
 
@@ -2205,6 +2422,7 @@ body::after{
   filter: none !important;
 }
 &lt;/style&gt;
+
 
 &lt;style&gt;
 /* ===== FINAL FIXES v4 (FORCE) ===== */
@@ -2254,6 +2472,7 @@ body .grid .card:not(.card-total):hover{
 /* ===== end v4 ===== */
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* ===== FIX v5: remove gray glare on underline when hovering filter tags ===== */
 
@@ -2295,6 +2514,7 @@ header h1::after{
   opacity: 1 !important;
 }
 &lt;/style&gt;
+
 
 &lt;style&gt;
 /* ===== FIX v6: rebuild title underline as a real element (kills gray hover glare) ===== */
@@ -2345,6 +2565,7 @@ header .title-underline{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* ===== FIX v7: remove remaining pale glare by making underline solid + masked ends ===== */
 
@@ -2381,6 +2602,7 @@ header .title-underline{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* ===== FIX v8: the &quot;glare&quot; is caused by filter buttons hover transform/background repaint.
    Solution: freeze filter buttons (no transform, no background change) on hover/focus. ===== */
@@ -2408,6 +2630,7 @@ header .title-underline{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* ===== FIX v9: make underline 100% solid pink (no alpha, no gradients, no masks) ===== */
 header .title-underline{
@@ -2419,6 +2642,7 @@ header .title-underline{
   mask-image: none !important;
 }
 &lt;/style&gt;
+
 
 &lt;style&gt;
 /* ===== FIX v10: remove underline element entirely; use native text-decoration underline (no glare) ===== */
@@ -2440,6 +2664,7 @@ header h1{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* ===== FINAL: remove title underline completely (eliminates hover banding/glare) ===== */
 header .title-underline{ display: none !important; }
@@ -2449,6 +2674,7 @@ header h1{
 /* add a tiny spacing so layout still feels intentional */
 header{ margin-bottom: 10px !important; }
 &lt;/style&gt;
+
 
 &lt;style&gt;
 /* ===== FINAL HEADER RESET: remove any plate/pill/underline artifacts completely ===== */
@@ -2462,7 +2688,7 @@ header, header *{
 header{
   border: none !important;
   padding: 0 !important;
-  margin-top: 14px !important;
+  margin-top: 4px !important;
   margin-bottom: 10px !important;
 }
 
@@ -2486,6 +2712,7 @@ header h1{
   background: transparent !important;
 }
 &lt;/style&gt;
+
 
 &lt;style&gt;
 /* ===== v11: kill the real source of the glare: backdrop-filter / compositing on filter chips ===== */
@@ -2524,6 +2751,7 @@ header h1{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* ===== v12: remove the &quot;plate&quot; effect from filter tags entirely (flat, no repaint band) ===== */
 .filter-btn{
@@ -2558,6 +2786,7 @@ header h1{
   filter: none !important;
 }
 &lt;/style&gt;
+
 
 &lt;style&gt;
 /* ===== v13: restore pretty underline and ensure it&#x27;s visible ===== */
@@ -2611,6 +2840,7 @@ header{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* FORCE card title size (final override) */
 .card-title{
@@ -2618,6 +2848,7 @@ header{
   line-height: 1.2 !important;
 }
 &lt;/style&gt;
+
 
 &lt;style&gt;
 /* FINAL: restore original card title size */
@@ -2628,6 +2859,7 @@ header{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* FINAL ABSOLUTE FIX: match original visual size */
 .card-title{
@@ -2637,6 +2869,7 @@ header{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* FINAL HARD RESET — EXACTLY LIKE BEFORE */
 .card-title{
@@ -2645,6 +2878,7 @@ header{
   font-weight: 600 !important;
 }
 &lt;/style&gt;
+
 
 &lt;style&gt;
 /* VARIANT A — increase title visually, keep card scale */
@@ -2663,6 +2897,7 @@ header{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* EXTRA SMALL tags – ultra subtle */
 .goal-tag{
@@ -2672,6 +2907,7 @@ header{
   border-radius: 999px !important;
 }
 &lt;/style&gt;
+
 
 &lt;style&gt;
 /* Normalize social &amp; buy tags to match others */
@@ -2683,6 +2919,7 @@ header{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* FORCE unified font inside all tags */
 .goal-tag,
@@ -2692,6 +2929,7 @@ header{
   letter-spacing: 0.01em !important;
 }
 &lt;/style&gt;
+
 
 &lt;style&gt;
 /* FINAL: make ALL tag text the same size (no exceptions) */
@@ -2710,6 +2948,7 @@ header{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* FINAL TUNE: small, consistent, elegant tags */
 .goal-tag{
@@ -2724,6 +2963,7 @@ header{
   line-height: inherit !important;
 }
 &lt;/style&gt;
+
 
 &lt;style&gt;
 /* FINAL FINAL: tags truly small + identical boxes */
@@ -2760,6 +3000,7 @@ header{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* FINAL x0.5: tags reduced 2x, still consistent */
 .goal-tag{
@@ -2781,6 +3022,7 @@ header{
   padding: 1px 3px !important;
 }
 &lt;/style&gt;
+
 
 &lt;style&gt;
 /* HARD: shrink tags 2x via transform (wins over any font overrides) */
@@ -2810,6 +3052,7 @@ header{
   padding: inherit !important;
 }
 &lt;/style&gt;
+
 
 &lt;style&gt;
 /* FINAL NORMALIZATION: buy &amp; social tags match others exactly */
@@ -2851,6 +3094,7 @@ header{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* FINAL TUNE: tags slightly larger (balanced, readable) */
 .goal-tag{
@@ -2886,6 +3130,7 @@ header{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* FINAL SCALE UP: tags x2 from balanced size */
 .goal-tag{
@@ -2920,6 +3165,7 @@ header{
   transform: none !important;
 }
 &lt;/style&gt;
+
 
 &lt;style&gt;
 /* FINAL BALANCE: equal visual pill size for ALL tags */
@@ -2962,6 +3208,7 @@ header{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* WIDER, CLEAN TAG PILLS — like original, but consistent */
 
@@ -3002,6 +3249,7 @@ header{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* EXTRA WIDE TAG PILLS — airy, like original large badges */
 
@@ -3037,6 +3285,7 @@ header{
   white-space: nowrap !important;
 }
 &lt;/style&gt;
+
 
 &lt;style&gt;
 /* FIX: tags were NOT getting wider because scale() shrinks them.
@@ -3078,6 +3327,7 @@ header{
 }
 &lt;/style&gt;
 
+
 &lt;style&gt;
 /* FINAL: make ALL tag pills одинаково широкими (короткие слова не сжимаются) */
 .goal-tag,
@@ -3094,6 +3344,7 @@ header{
 }
 &lt;/style&gt;
 
+
 &lt;style id=&quot;subtitleAboveTitle&quot;&gt;
 .title-sub{
   text-align: center;
@@ -3103,7 +3354,7 @@ header{
 }
 &lt;/style&gt;
 
-&lt;style id=&quot;pwa-safe-top&quot;&gt;body{padding-top:calc(env(safe-area-inset-top, 0px) + 22px) !important;}&lt;/style&gt;
+&lt;style id=&quot;pwa-safe-top&quot;&gt;body{padding-top:calc(env(safe-area-inset-top, 0px) + 8px) !important;}&lt;/style&gt;
 &lt;/head&gt;
 
 &lt;body&gt;
@@ -3882,6 +4133,7 @@ header{
     }
     // ===== end set total modal =====
 
+
     function loadState() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -4050,6 +4302,7 @@ function colorToShadow(color) {
       const mainText = card.querySelector(&quot;.js-text-main&quot;);
       const subText  = card.querySelector(&quot;.js-text-sub&quot;);
       const left = Math.max(0, target - current);
+
 
 // Спец-логика по отдельным целям
 if (goalId === &quot;office&quot;) {
@@ -4237,6 +4490,7 @@ if (goalId === &quot;english&quot;) {
           });
         });
 
+
         // &quot;Всего минут&quot; только для цели &quot;Часы работы&quot;
         const minutesBtn = card.querySelector(&quot;.js-set-minutes&quot;);
         if (minutesBtn) {
@@ -4271,6 +4525,7 @@ if (goalId === &quot;english&quot;) {
         if (!card) return;
         const inputAbs = card.querySelector(&quot;.js-input-absolute&quot;);
         const btnSetAbs = card.querySelector(&quot;.js-set-absolute&quot;);
+
 
 const btnPlus = card.querySelector(&quot;.js-abs-plus&quot;);
 const btnMinus = card.querySelector(&quot;.js-abs-minus&quot;);
@@ -4446,6 +4701,7 @@ if (btnMinus) {
       setupDailyCheckpoints();
     });
   
+
 
 
 
@@ -4659,6 +4915,8 @@ currentNotesGoalId = goalId;
 
 
 
+
+
 &lt;style id=&quot;tagWidthFinalOverride&quot;&gt;
 /* FINAL OVERRIDE: base tags */
 .goal-tag{
@@ -4680,6 +4938,8 @@ currentNotesGoalId = goalId;
   line-height: 1 !important;
 }
 &lt;/style&gt;
+
+
 
 
 
@@ -4797,6 +5057,7 @@ button.primary, .btn-primary, .primary{
 }
 
 
+
 /* ===== Requested tweaks (checkpoint done color + remove white tap flash) ===== */
 /* 1) Daily checkpoint state=2 (✓) — match site rose style (no green) */
 .daily-check[data-state=&quot;2&quot;] .daily-check-circle{
@@ -4830,6 +5091,7 @@ button:focus-visible{
 }
 /* ===== end tweaks ===== */
 
+
 /* ===== v17 tweaks: hover scale + header spacing + custom total input modal ===== */
 .card:not(.card-total):hover{
   transform: translateY(-2px) scale(1.02);
@@ -4837,7 +5099,7 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 14px !important;
+  margin-top: 2px !important;
   margin-bottom: 0px !important;
   gap: 6px !important;
 }
@@ -4889,13 +5151,13 @@ header{
   padding: 18px 18px 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 18px;
 }
 .set-modal-top{
   display:flex;
   align-items:flex-start;
   justify-content: space-between;
-  gap: 10px;
+  gap: 18px;
 }
 .set-modal-title{
   font-size: 1.02rem;
@@ -4953,9 +5215,11 @@ header{
 }
 /* ===== end v17 tweaks ===== */
 
+
 /* === FIX: remove square glow around progress container === */
 .progress-circle{ filter: none !important; }
 .progress-circle svg{ filter: none !important; }
+
 
 /* ===============================
    LIGHT LUXURY THEME (white / blush / black)
@@ -5191,6 +5455,7 @@ header h1{
   color: #0b0f19 !important;
 }
 
+
 /* === TRUE TEXT-ONLY HEADER: remove any container visuals === */
 header,
 .header,
@@ -5218,6 +5483,7 @@ header h1{
   border-radius: 0 !important;
   color: #0b0f19 !important;
 }
+
 
 /* === HEADER: subtle outline + underline, no shadows === */
 header h1{
@@ -5254,6 +5520,7 @@ header h1::after{
   text-shadow: none !important;
   filter: none !important;
 }
+
 
 /* === HEADER PRETTY (site-style, no shadows) === */
 header{
@@ -5298,6 +5565,7 @@ header h1::after{
   box-shadow: none !important;
   filter: none !important;
 }
+
 
 /* === HEADER LUXURY: editorial text + hairline brand underline (no pill, no shadows) === */
 header{
@@ -5671,6 +5939,7 @@ border-radius: 999px !important;
 }
 
 
+
 /* ===== Requested tweaks (checkpoint done color + remove white tap flash) ===== */
 /* 1) Daily checkpoint state=2 (✓) — match site rose style (no green) */
 .daily-check[data-state=&quot;2&quot;] .daily-check-circle{
@@ -5704,6 +5973,7 @@ button:focus-visible{
 }
 /* ===== end tweaks ===== */
 
+
 /* ===== v17 tweaks: hover scale + header spacing + custom total input modal ===== */
 .card:not(.card-total):hover{
   transform: translateY(-2px) scale(1.02);
@@ -5711,7 +5981,7 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 14px !important;
+  margin-top: 2px !important;
   margin-bottom: 0px !important;
   gap: 6px !important;
 }
@@ -5763,13 +6033,13 @@ header{
   padding: 18px 18px 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 18px;
 }
 .set-modal-top{
   display:flex;
   align-items:flex-start;
   justify-content: space-between;
-  gap: 10px;
+  gap: 18px;
 }
 .set-modal-title{
   font-size: 1.02rem;
@@ -5827,9 +6097,11 @@ header{
 }
 /* ===== end v17 tweaks ===== */
 
+
 /* === FIX: remove square glow around progress container === */
 .progress-circle{ filter: none !important; }
 .progress-circle svg{ filter: none !important; }
+
 
 /* ===============================
    LIGHT LUXURY THEME (white / blush / black)
@@ -6065,6 +6337,7 @@ header h1{
   color: #0b0f19 !important;
 }
 
+
 /* === TRUE TEXT-ONLY HEADER: remove any container visuals === */
 header,
 .header,
@@ -6092,6 +6365,7 @@ header h1{
   border-radius: 0 !important;
   color: #0b0f19 !important;
 }
+
 
 /* === HEADER: subtle outline + underline, no shadows === */
 header h1{
@@ -6128,6 +6402,7 @@ header h1::after{
   text-shadow: none !important;
   filter: none !important;
 }
+
 
 /* === HEADER PRETTY (site-style, no shadows) === */
 header{
@@ -6172,6 +6447,7 @@ header h1::after{
   box-shadow: none !important;
   filter: none !important;
 }
+
 
 /* === HEADER LUXURY: editorial text + hairline brand underline (no pill, no shadows) === */
 header{
@@ -6277,6 +6553,7 @@ body::after{
 }
 
 
+
 /* ===== Requested tweaks (checkpoint done color + remove white tap flash) ===== */
 /* 1) Daily checkpoint state=2 (✓) — match site rose style (no green) */
 .daily-check[data-state=&quot;2&quot;] .daily-check-circle{
@@ -6309,6 +6586,7 @@ button:focus-visible{
   box-shadow: 0 0 0 2px rgba(212,74,130,.22);
 }
 /* ===== end tweaks ===== */
+
 
 /* === FIX: убираем белый блик/подсветку при hover на карточках целей === */
 .card:not(.card-total):hover{
@@ -6356,6 +6634,7 @@ button:focus-visible{
 }
 
 
+
 /* ===== v17 tweaks: hover scale + header spacing + custom total input modal ===== */
 .card:not(.card-total):hover{
   transform: translateY(-2px) scale(1.02);
@@ -6363,7 +6642,7 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 14px !important;
+  margin-top: 2px !important;
   margin-bottom: 0px !important;
   gap: 6px !important;
 }
@@ -6415,13 +6694,13 @@ header{
   padding: 18px 18px 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 18px;
 }
 .set-modal-top{
   display:flex;
   align-items:flex-start;
   justify-content: space-between;
-  gap: 10px;
+  gap: 18px;
 }
 .set-modal-title{
   font-size: 1.02rem;
@@ -6479,6 +6758,7 @@ header{
 }
 /* ===== end v17 tweaks ===== */
 
+
 /* ===== FORCE cards hover (ULTRA soft, pale glow) ===== */
 /* ===== ULTRA SMOOTH animated hover ===== */
 .card:not(.card-total){
@@ -6514,6 +6794,7 @@ header{
 /* ===== END ULTRA SMOOTH ===== */
 /* ===== END FORCE ===== */
 
+
 /* ===== FINAL: cards hover EXACTLY like buttons (+ / − / Всего) =====
    Buttons in this file:
    - base: background rgba(255,255,255,.04) !important; border-color rgba(255,255,255,.14) !important; (shadow already set)
@@ -6536,6 +6817,7 @@ header{
 }
 /* ===== END FINAL ===== */
 
+
 /* ===== ADD: smooth minimal lift on hover (keeping button-like hover) ===== */
 .card:not(.card-total){
   transition:
@@ -6551,9 +6833,11 @@ header{
 }
 /* ===== END ADD ===== */
 
+
 /* === FIX: remove square glow around progress container === */
 .progress-circle{ filter: none !important; }
 .progress-circle svg{ filter: none !important; }
+
 
 /* ===============================
    LIGHT LUXURY THEME (white / blush / black)
@@ -6789,6 +7073,7 @@ header h1{
   color: #0b0f19 !important;
 }
 
+
 /* === TRUE TEXT-ONLY HEADER: remove any container visuals === */
 header,
 .header,
@@ -6816,6 +7101,7 @@ header h1{
   border-radius: 0 !important;
   color: #0b0f19 !important;
 }
+
 
 /* === HEADER: subtle outline + underline, no shadows === */
 header h1{
@@ -6852,6 +7138,7 @@ header h1::after{
   text-shadow: none !important;
   filter: none !important;
 }
+
 
 /* === HEADER PRETTY (site-style, no shadows) === */
 header{
@@ -6896,6 +7183,7 @@ header h1::after{
   box-shadow: none !important;
   filter: none !important;
 }
+
 
 /* === HEADER LUXURY: editorial text + hairline brand underline (no pill, no shadows) === */
 header{
@@ -6957,6 +7245,7 @@ header h1::after{
 }
 
 
+
 /* ===== FINAL OVERRIDE: remove gray shadow at rest, keep pink shadow only on hover ===== */
 .card:not(.card-total){
   /* no gray/black drop shadow in idle state */
@@ -7000,7 +7289,7 @@ header h1::after{
       background: radial-gradient(circle at top left, #1e293b 0, #020617 55%);
       color: var(--text-main);
       min-height: 100vh;
-      padding: 16px;
+      padding: 6px;
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -7008,10 +7297,10 @@ header h1::after{
     header {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 18px;
       align-items: center;
       text-align: center;
-      margin-top: 10px; margin-bottom: 4px;
+      margin-top: 2px; margin-bottom: 4px;
     }
     header h1 {
       font-size: 1.9rem;
@@ -7045,7 +7334,7 @@ header h1::after{
       justify-content: center;
       align-items: center;
       width: 100%;
-      margin-top: 10px;
+      margin-top: 6px;
       margin-bottom: 5px;
     }
 
@@ -7198,7 +7487,7 @@ header h1::after{
     .progress-wrap {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 18px;
     }
     
 .progress-circle {
@@ -7338,7 +7627,7 @@ header h1::after{
     .card-total .progress-wrap {
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 18px;
     }
     .card-total .progress-circle {
       width: 150px;
@@ -7381,6 +7670,7 @@ header h1::after{
     .tag-body { background: rgba(168,85,247,0.18); color:#d8b4fe; border-color: rgba(168,85,247,0.45);} 
     .tag-dev { background: rgba(253,224,71,0.18); color:#fde68a; border-color: rgba(253,224,71,0.45);} 
 
+
 .filter-bar {
   display:flex;
   flex-wrap:wrap;
@@ -7405,6 +7695,7 @@ header h1::after{
   display:none !important;
 }
 
+
 /* Убираем стрелки у number input */
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
@@ -7414,6 +7705,7 @@ input[type=number]::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
 
 /* ===== Dark pink theme (override) ===== */
 :root{
@@ -7583,6 +7875,7 @@ button.secondary{
 
 
 
+
 /* ===== Corner buttons alignment (checkpoint + info) ===== */
 /* Pin the checkpoint to the same x as the info button */
 .card:not(.card-total) .daily-check{
@@ -7641,6 +7934,7 @@ button.secondary{
 }
 /* ===== end corner buttons alignment ===== */
 
+
 /* ===== Notes modal (per-goal) ===== */
 .notes-modal-overlay{
   position: fixed;
@@ -7679,13 +7973,13 @@ button.secondary{
   padding: 18px 18px 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 18px;
 }
 .notes-modal-top{
   display:flex;
   align-items:flex-start;
   justify-content: space-between;
-  gap: 10px;
+  gap: 18px;
 }
 .notes-modal-title{
   font-size: 1.05rem;
@@ -7731,6 +8025,7 @@ button.secondary{
   color: rgba(17,24,39,0.35);
 }
 
+
 /* Rich notes editor (contenteditable) */
 .notes-editor{
   width: 100%;
@@ -7762,6 +8057,7 @@ button.secondary{
   font-style: italic;
   font-weight: 500;
 }
+
 
 .notes-modal-actions{
   display:flex;
@@ -7795,6 +8091,7 @@ button.secondary{
   display:flex;
 }
 /* ===== end notes modal ===== */
+
 
 /* ===== Notes modal refinements ===== */
 .notes-modal-overlay{
@@ -7842,6 +8139,7 @@ button.secondary{
 }
 /* ===== end refinements ===== */
 
+
 /* ===== FIX popup animation (use opacity/visibility instead of display) ===== */
 .notes-modal-overlay{
   display: flex;
@@ -7856,6 +8154,7 @@ button.secondary{
   opacity: 1;
 }
 /* ===== end fix ===== */
+
 
 /* ===== Close animation for notes popup ===== */
 .notes-modal-overlay{
@@ -7877,6 +8176,7 @@ button.secondary{
   opacity: 0;
 }
 /* ===== end close animation ===== */
+
 
 /* ===== Theme overrides (neutral dark, less pink, KEEP depth) ===== */
 :root{
@@ -8014,6 +8314,7 @@ button.primary:hover, .btn-primary:hover, .primary:hover{
   --tw-ring-color: rgba(212,74,130,.14);
 }
 
+
 /* ===== Requested tweaks (checkpoint done color + remove white tap flash) ===== */
 /* 1) Daily checkpoint state=2 (✓) — match site rose style (no green) */
 .daily-check[data-state=&quot;2&quot;] .daily-check-circle{
@@ -8047,6 +8348,7 @@ button:focus-visible{
 }
 /* ===== end tweaks ===== */
 
+
 /* === FIX v16: убираем артефакт белой полосы при наведении на чекпоинт ===
    Источник: backdrop-filter на .card даёт compositing seam в Chrome/Safari при hover/анимациях вложенных элементов.
    Решение: отключаем backdrop-filter на карточках и изолируем их от перерисовки.
@@ -8056,6 +8358,7 @@ button:focus-visible{
   backdrop-filter: none !important;
   contain: paint;
 }
+
 
 
 /* === FIX v16: убираем белую вертикальную полосу/блик при наведении на чекпоинт ===
@@ -8068,6 +8371,7 @@ button:focus-visible{
   contain: paint;
 }
 
+
 /* ===== v17 tweaks: hover scale + header spacing + custom total input modal ===== */
 .card:not(.card-total):hover{
   transform: translateY(-2px) scale(1.02);
@@ -8075,7 +8379,7 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 14px !important;
+  margin-top: 2px !important;
   margin-bottom: 0px !important;
   gap: 6px !important;
 }
@@ -8127,13 +8431,13 @@ header{
   padding: 18px 18px 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 18px;
 }
 .set-modal-top{
   display:flex;
   align-items:flex-start;
   justify-content: space-between;
-  gap: 10px;
+  gap: 18px;
 }
 .set-modal-title{
   font-size: 1.02rem;
@@ -8191,9 +8495,11 @@ header{
 }
 /* ===== end v17 tweaks ===== */
 
+
 /* === FIX: remove square glow around progress container === */
 .progress-circle{ filter: none !important; }
 .progress-circle svg{ filter: none !important; }
+
 
 /* === FIX v4: remove ANY filter-based glow that can render as a square while progress animates === */
 .progress-circle,
@@ -8203,6 +8509,7 @@ header{
   filter: none !important;
   -webkit-filter: none !important;
 }
+
 
 /* === FINAL FIX: keep notes save button pink on hover (inside page) === */
 .notes-btn:hover{
@@ -8214,8 +8521,12 @@ header{
   background: linear-gradient(135deg, var(--pink-2), var(--pink-1)) !important;
 }
 
+
+
+/* Reserve space so cards are not hidden behind bottom tab bar */
+body{ padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 120px) !important; }
 &lt;/style&gt;
-&lt;style id=&quot;pwa-safe-top&quot;&gt;body{padding-top:calc(env(safe-area-inset-top, 0px) + 22px) !important;}&lt;/style&gt;
+&lt;style id=&quot;pwa-safe-top&quot;&gt;body{padding-top:calc(env(safe-area-inset-top, 0px) + 8px) !important;}&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 &lt;header&gt;
@@ -8638,6 +8949,7 @@ header{
     }
     // ===== end set total modal =====
 
+
     function loadState() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -8798,6 +9110,7 @@ function colorToShadow(color) {
       const mainText = card.querySelector(&quot;.js-text-main&quot;);
       const subText  = card.querySelector(&quot;.js-text-sub&quot;);
       const left = Math.max(0, target - current);
+
 
 // Спец-логика по отдельным целям
 if (goalId === &quot;office&quot;) {
@@ -8985,6 +9298,7 @@ if (goalId === &quot;__unused_english_c2&quot;) {
           });
         });
 
+
         // &quot;Всего минут&quot; только для цели &quot;Часы работы&quot;
         const minutesBtn = card.querySelector(&quot;.js-set-minutes&quot;);
         if (minutesBtn) {
@@ -9019,6 +9333,7 @@ if (goalId === &quot;__unused_english_c2&quot;) {
         if (!card) return;
         const inputAbs = card.querySelector(&quot;.js-input-absolute&quot;);
         const btnSetAbs = card.querySelector(&quot;.js-set-absolute&quot;);
+
 
 const btnPlus = card.querySelector(&quot;.js-abs-plus&quot;);
 const btnMinus = card.querySelector(&quot;.js-abs-minus&quot;);
@@ -9194,6 +9509,7 @@ if (btnMinus) {
       setupDailyCheckpoints();
     });
   
+
 
 
 
@@ -9515,6 +9831,7 @@ button.primary, .btn-primary, .primary{
 }
 
 
+
 /* ===== Requested tweaks (checkpoint done color + remove white tap flash) ===== */
 /* 1) Daily checkpoint state=2 (✓) — match site rose style (no green) */
 .daily-check[data-state=&quot;2&quot;] .daily-check-circle{
@@ -9548,6 +9865,7 @@ button:focus-visible{
 }
 /* ===== end tweaks ===== */
 
+
 /* ===== v17 tweaks: hover scale + header spacing + custom total input modal ===== */
 .card:not(.card-total):hover{
   transform: translateY(-2px) scale(1.02);
@@ -9555,7 +9873,7 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 14px !important;
+  margin-top: 2px !important;
   margin-bottom: 0px !important;
   gap: 6px !important;
 }
@@ -9607,13 +9925,13 @@ header{
   padding: 18px 18px 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 18px;
 }
 .set-modal-top{
   display:flex;
   align-items:flex-start;
   justify-content: space-between;
-  gap: 10px;
+  gap: 18px;
 }
 .set-modal-title{
   font-size: 1.02rem;
@@ -9670,6 +9988,7 @@ header{
   box-shadow: none !important;
 }
 /* ===== end v17 tweaks ===== */
+
 
 /* === FIX: remove square glow around progress container === */
 .progress-circle{ filter: none !important; }
@@ -9988,6 +10307,7 @@ border-radius: 999px !important;
 }
 
 
+
 /* ===== Requested tweaks (checkpoint done color + remove white tap flash) ===== */
 /* 1) Daily checkpoint state=2 (✓) — match site rose style (no green) */
 .daily-check[data-state=&quot;2&quot;] .daily-check-circle{
@@ -10021,6 +10341,7 @@ button:focus-visible{
 }
 /* ===== end tweaks ===== */
 
+
 /* ===== v17 tweaks: hover scale + header spacing + custom total input modal ===== */
 .card:not(.card-total):hover{
   transform: translateY(-2px) scale(1.02);
@@ -10028,7 +10349,7 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 14px !important;
+  margin-top: 2px !important;
   margin-bottom: 0px !important;
   gap: 6px !important;
 }
@@ -10080,13 +10401,13 @@ header{
   padding: 18px 18px 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 18px;
 }
 .set-modal-top{
   display:flex;
   align-items:flex-start;
   justify-content: space-between;
-  gap: 10px;
+  gap: 18px;
 }
 .set-modal-title{
   font-size: 1.02rem;
@@ -10143,6 +10464,7 @@ header{
   box-shadow: none !important;
 }
 /* ===== end v17 tweaks ===== */
+
 
 /* === FIX: remove square glow around progress container === */
 .progress-circle{ filter: none !important; }
@@ -10193,6 +10515,7 @@ body::after{
 }
 
 
+
 /* ===== Requested tweaks (checkpoint done color + remove white tap flash) ===== */
 /* 1) Daily checkpoint state=2 (✓) — match site rose style (no green) */
 .daily-check[data-state=&quot;2&quot;] .daily-check-circle{
@@ -10225,6 +10548,7 @@ button:focus-visible{
   box-shadow: 0 0 0 2px rgba(212,74,130,.22);
 }
 /* ===== end tweaks ===== */
+
 
 /* === FIX: убираем белый блик/подсветку при hover на карточках целей === */
 .card:not(.card-total):hover{
@@ -10272,6 +10596,7 @@ button:focus-visible{
 }
 
 
+
 /* ===== v17 tweaks: hover scale + header spacing + custom total input modal ===== */
 .card:not(.card-total):hover{
   transform: translateY(-2px) scale(1.02);
@@ -10279,7 +10604,7 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 14px !important;
+  margin-top: 2px !important;
   margin-bottom: 0px !important;
   gap: 6px !important;
 }
@@ -10331,13 +10656,13 @@ header{
   padding: 18px 18px 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 18px;
 }
 .set-modal-top{
   display:flex;
   align-items:flex-start;
   justify-content: space-between;
-  gap: 10px;
+  gap: 18px;
 }
 .set-modal-title{
   font-size: 1.02rem;
@@ -10395,6 +10720,7 @@ header{
 }
 /* ===== end v17 tweaks ===== */
 
+
 /* ===== FORCE cards hover (ULTRA soft, pale glow) ===== */
 /* ===== ULTRA SMOOTH animated hover ===== */
 .card:not(.card-total){
@@ -10430,6 +10756,7 @@ header{
 /* ===== END ULTRA SMOOTH ===== */
 /* ===== END FORCE ===== */
 
+
 /* ===== FINAL: cards hover EXACTLY like buttons (+ / − / Всего) =====
    Buttons in this file:
    - base: background rgba(255,255,255,.04) !important; border-color rgba(255,255,255,.14) !important; (shadow already set)
@@ -10452,6 +10779,7 @@ header{
 }
 /* ===== END FINAL ===== */
 
+
 /* ===== ADD: smooth minimal lift on hover (keeping button-like hover) ===== */
 .card:not(.card-total){
   transition:
@@ -10466,6 +10794,7 @@ header{
   transform: translateY(-1px) !important; /* ultra subtle lift */
 }
 /* ===== END ADD ===== */
+
 
 /* === FIX: remove square glow around progress container === */
 .progress-circle{ filter: none !important; }
@@ -10502,6 +10831,7 @@ header{
       document.body.classList.toggle('mode-light', is1);
       document.body.classList.toggle('mode-dark', !is1);
 
+
       // remember last page
       try { localStorage.setItem('goals_last_page', String(which)); } catch(e) {}
     }
@@ -10535,6 +10865,7 @@ header{
   }
 </script>
 
+
   <nav class="bottom-tabs" aria-label="Нижнее меню">
     <div class="tabs-inner" role="tablist" aria-label="Разделы">
       <button class="tab-btn active" id="tab-10" type="button" role="tab" aria-selected="true">
@@ -10562,6 +10893,10 @@ header{
   }
 
   function showPage(isTen){
+    // sync shell theme with page
+    document.body.classList.toggle('mode-light', !!isTen);
+    document.body.classList.toggle('mode-dark', !isTen);
+
     // Prefer clicking existing buttons if handlers exist
     if(isTen){
       if(btn1) btn1.click();
@@ -10584,8 +10919,17 @@ header{
   if(tab1)  tab1.addEventListener('click',  ()=>showPage(false));
 
   // Keep in sync if user uses the top switcher
-  if(btn1) btn1.addEventListener('click', ()=>setActive(true));
-  if(btn2) btn2.addEventListener('click', ()=>setActive(false));
+  if(btn1) btn1.addEventListener('click', ()=>{setActive(true); document.body.classList.add('mode-dark'); document.body.classList.remove('mode-light');});
+  if(btn2) btn2.addEventListener('click', ()=>{setActive(false); document.body.classList.add('mode-dark'); document.body.classList.remove('mode-light');});
+
+  /* init theme */
+  try{
+    const isTenInit = (page1 && page1.classList.contains('active')) || (!page2 || !page2.classList.contains('active'));
+    document.body.classList.toggle('mode-light', !!isTenInit);
+    document.body.classList.toggle('mode-dark', !isTenInit);
+    setActive(!!isTenInit);
+  }catch(e){}
+
 })();
 </script>
 </body>
