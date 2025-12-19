@@ -164,7 +164,7 @@ html, body {
 }
 body {
   margin: 0;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-bottom: 0; /* removed safe-area padding to avoid bottom bar */
 }
 </style>
 
@@ -239,6 +239,67 @@ html, body{
   height: 100% !important;
 }
 </style>
+
+
+<style id="ios-bottom-bar-surgical-fix">
+/* Variant 4 (surgical): don't reserve bottom safe-area; instead keep shell background in sync with active page
+   so no contrasting bar is visible in iOS PWA. */
+html, body{
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--shell-bg, #ffffff) !important;
+  overscroll-behavior: none;
+}
+body{ padding-bottom: 0 !important; }
+
+/* Make sure the iframe itself paints the background (prevents revealing html/body seams) */
+.page{
+  background: var(--shell-bg, #ffffff) !important;
+}
+
+/* Use dynamic viewport units for the shell area (reduces iOS 1px seams) */
+#pages{
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
+}
+</style>
+
+<script id="shell-bg-sync-active-page">
+(function(){
+  var DARK = '#050814';
+  var LIGHT = '#ffffff';
+
+  function setShellBg(bg){
+    document.documentElement.style.setProperty('--shell-bg', bg);
+    document.body.style.background = bg;
+  }
+
+  function syncFromActive(){
+    // page-1 is dark (10 years), page-2 is light (1 year)
+    var p1 = document.getElementById('page-1');
+    var p2 = document.getElementById('page-2');
+    var isP1Active = p1 && p1.classList.contains('active');
+    setShellBg(isP1Active ? DARK : LIGHT);
+  }
+
+  // initial sync
+  syncFromActive();
+
+  // sync on switcher clicks
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    if(!t) return;
+    if(t.id === 'btn-page-1') setShellBg(DARK);
+    if(t.id === 'btn-page-2') setShellBg(LIGHT);
+  }, {passive:true});
+
+  // also resync after layout changes
+  window.addEventListener('pageshow', syncFromActive, {passive:true});
+  window.addEventListener('resize', syncFromActive, {passive:true});
+})();
+</script>
 
 </head>
 <body class="mode-light">
