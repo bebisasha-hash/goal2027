@@ -1412,6 +1412,44 @@ button.secondary{
 }
 /* ===== end notes modal ===== */
 
+/* === FIX: Notes titles readable (black + bold) === */
+.notes-modal-title{
+  color: rgba(11,15,25,0.92) !important;
+  font-weight: 800 !important;
+}
+.notes-modal-sub{
+  color: rgba(11,15,25,0.60) !important;
+  font-weight: 650 !important;
+}
+
+/* === FIX: Notes modal fixed size + internal scroll === */
+.notes-modal{
+  max-height: min(78vh, 680px) !important;
+}
+.notes-modal-inner{
+  max-height: min(78vh, 680px) !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.notes-editor,
+.notes-textarea{
+  flex: 1 1 auto !important;
+  min-height: 220px !important;
+  max-height: 44vh !important;
+  overflow: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* keep actions visible */
+.notes-modal-actions{ flex: 0 0 auto !important; }
+
+@media (max-width: 480px){
+  .notes-modal{ max-height: 82vh !important; }
+  .notes-editor, .notes-textarea{ max-height: 52vh !important; }
+}
+
+
 
 /* ===== Notes modal refinements ===== */
 .notes-modal-overlay{
@@ -5221,7 +5259,7 @@ header h1::after{ content:none !important; display:none !important; }
 &lt;script&gt;
         const COUNTER_TARGETS = {&#x27;sense_downloads&#x27;: {&#x27;target&#x27;: 500000000, &#x27;unit&#x27;: &#x27;&#x27;}, &#x27;sense_active&#x27;: {&#x27;target&#x27;: 75000000, &#x27;unit&#x27;: &#x27;&#x27;}, &#x27;sense_paid&#x27;: {&#x27;target&#x27;: 5000000, &#x27;unit&#x27;: &#x27;&#x27;}, &#x27;team&#x27;: {&#x27;target&#x27;: 50, &#x27;unit&#x27;: &#x27;человек&#x27;}, &#x27;office&#x27;: {&#x27;target&#x27;: 1, &#x27;unit&#x27;: &#x27;офис&#x27;}, &#x27;school&#x27;: {&#x27;target&#x27;: 1, &#x27;unit&#x27;: &#x27;школа&#x27;}, &#x27;sense_revenue&#x27;: {&#x27;target&#x27;: 100000000, &#x27;unit&#x27;: &#x27;$&#x27;}, &#x27;personal_income&#x27;: {&#x27;target&#x27;: 1000000, &#x27;unit&#x27;: &#x27;$&#x27;}, &#x27;instagram&#x27;: {&#x27;target&#x27;: 5000000, &#x27;unit&#x27;: &#x27;&#x27;}, &#x27;youtube&#x27;: {&#x27;target&#x27;: 5000000, &#x27;unit&#x27;: &#x27;&#x27;}, &#x27;house&#x27;: {&#x27;target&#x27;: 1, &#x27;unit&#x27;: &#x27;дом&#x27;}, &#x27;apartments&#x27;: {&#x27;target&#x27;: 5, &#x27;unit&#x27;: &#x27;квартир&#x27;}, &#x27;car&#x27;: {&#x27;target&#x27;: 1, &#x27;unit&#x27;: &#x27;машина&#x27;}, &#x27;gym&#x27;: {&#x27;target&#x27;: 1000, &#x27;unit&#x27;: &#x27;&#x27;}, &#x27;books&#x27;: {&#x27;target&#x27;: 1000, &#x27;unit&#x27;: &#x27;книг&#x27;}, &#x27;therapy&#x27;: {&#x27;target&#x27;: 200, &#x27;unit&#x27;: &#x27;сеансов&#x27;}, &#x27;english&#x27;: {&#x27;target&#x27;: 6, &#x27;unit&#x27;: &#x27;&#x27;}, &#x27;speeches&#x27;: {&#x27;target&#x27;: 100, &#x27;unit&#x27;: &#x27;выступлений&#x27;}, &#x27;travel&#x27;: {&#x27;target&#x27;: 100, &#x27;unit&#x27;: &#x27;стран&#x27;}};
     const ABSOLUTE_TARGETS = {};
-        const WEIGHT_TARGET = {&#x27;targetLoss&#x27;: 13, &#x27;unit&#x27;: &#x27;кг&#x27;, &#x27;start&#x27;: 73, &#x27;targetWeight&#x27;: 60};
+        const WEIGHT_TARGET = {&#x27;targetLoss&#x27;: 15, &#x27;unit&#x27;: &#x27;кг&#x27;, &#x27;start&#x27;: 75, &#x27;targetWeight&#x27;: 60};
 
         const GOAL_IDS = [&#x27;sense_downloads&#x27;,&#x27;sense_active&#x27;,&#x27;sense_paid&#x27;,&#x27;team&#x27;,&#x27;office&#x27;,&#x27;school&#x27;,&#x27;sense_revenue&#x27;,&#x27;personal_income&#x27;,&#x27;instagram&#x27;,&#x27;youtube&#x27;,&#x27;house&#x27;,&#x27;apartments&#x27;,&#x27;car&#x27;,&#x27;body&#x27;,&#x27;gym&#x27;,&#x27;books&#x27;,&#x27;therapy&#x27;,&#x27;english&#x27;,&#x27;speeches&#x27;,&#x27;travel&#x27;];
         const COUNTER_GOALS = [&#x27;sense_downloads&#x27;,&#x27;sense_active&#x27;,&#x27;sense_paid&#x27;,&#x27;team&#x27;,&#x27;office&#x27;,&#x27;school&#x27;,&#x27;sense_revenue&#x27;,&#x27;personal_income&#x27;,&#x27;instagram&#x27;,&#x27;youtube&#x27;,&#x27;house&#x27;,&#x27;apartments&#x27;,&#x27;car&#x27;,&#x27;gym&#x27;,&#x27;books&#x27;,&#x27;therapy&#x27;,&#x27;english&#x27;,&#x27;speeches&#x27;,&#x27;travel&#x27;];
@@ -9440,6 +9478,44 @@ button.secondary{
 }
 /* ===== end notes modal ===== */
 
+/* === FIX: Notes titles readable (black + bold) === */
+.notes-modal-title{
+  color: rgba(11,15,25,0.92) !important;
+  font-weight: 800 !important;
+}
+.notes-modal-sub{
+  color: rgba(11,15,25,0.60) !important;
+  font-weight: 650 !important;
+}
+
+/* === FIX: Notes modal fixed size + internal scroll === */
+.notes-modal{
+  max-height: min(78vh, 680px) !important;
+}
+.notes-modal-inner{
+  max-height: min(78vh, 680px) !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.notes-editor,
+.notes-textarea{
+  flex: 1 1 auto !important;
+  min-height: 220px !important;
+  max-height: 44vh !important;
+  overflow: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* keep actions visible */
+.notes-modal-actions{ flex: 0 0 auto !important; }
+
+@media (max-width: 480px){
+  .notes-modal{ max-height: 82vh !important; }
+  .notes-editor, .notes-textarea{ max-height: 52vh !important; }
+}
+
+
 
 /* ===== Notes modal refinements ===== */
 .notes-modal-overlay{
@@ -10305,7 +10381,7 @@ header h1::after{ content:none !important; display:none !important; }
 &lt;script&gt;
     const COUNTER_TARGETS = {&#x27;work_hours&#x27;: {&#x27;target&#x27;: 3000, &#x27;unit&#x27;: &#x27;часов&#x27;}, &#x27;income&#x27;: {&#x27;target&#x27;: 60000, &#x27;unit&#x27;: &#x27;$&#x27;}, &#x27;capital&#x27;: {&#x27;target&#x27;: 50000, &#x27;unit&#x27;: &#x27;$&#x27;}, &#x27;gym&#x27;: {&#x27;target&#x27;: 100, &#x27;unit&#x27;: &#x27;&#x27;}, &#x27;books&#x27;: {&#x27;target&#x27;: 100, &#x27;unit&#x27;: &#x27;книг&#x27;}, &#x27;therapy&#x27;: {&#x27;target&#x27;: 30, &#x27;unit&#x27;: &#x27;сеансов&#x27;}, &#x27;english_hours&#x27;: {&#x27;target&#x27;: 200, &#x27;unit&#x27;: &#x27;часов&#x27;}};
     const ABSOLUTE_TARGETS = {};
-    const WEIGHT_TARGET = {&#x27;targetLoss&#x27;: 13, &#x27;unit&#x27;: &#x27;кг&#x27;, &#x27;start&#x27;: 73, &#x27;targetWeight&#x27;: 60};
+    const WEIGHT_TARGET = {&#x27;targetLoss&#x27;: 15, &#x27;unit&#x27;: &#x27;кг&#x27;, &#x27;start&#x27;: 75, &#x27;targetWeight&#x27;: 60};
 
     const GOAL_IDS = [&#x27;work_hours&#x27;,&#x27;income&#x27;,&#x27;capital&#x27;,&#x27;body&#x27;,&#x27;gym&#x27;,&#x27;therapy&#x27;,&#x27;books&#x27;,&#x27;english_hours&#x27;];
     const COUNTER_GOALS = [&#x27;work_hours&#x27;,&#x27;income&#x27;,&#x27;capital&#x27;,&#x27;gym&#x27;,&#x27;therapy&#x27;,&#x27;books&#x27;,&#x27;english_hours&#x27;];
