@@ -16,7 +16,7 @@
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
-      top: calc(env(safe-area-inset-top, 0px) + 14px);
+      top: calc(env(safe-area-inset-top, 0px) + 8px);
       z-index: 999999;
       display: flex;
       flex-direction: column;
@@ -620,6 +620,48 @@ body.mode-dark .bottom-tabs #tab-aplus:not(.active) .ico{
 }
 </style>
 
+
+<style id="notes-modal-compact-override">
+  /* Compact notes modal card on mobile */
+  .notes-modal{
+    width: min(560px, calc(100vw - 28px)) !important;
+    max-height: 56vh !important;
+    padding: 14px 14px 12px !important;
+  }
+  .notes-modal-body{ padding: 0 !important; }
+  .notes-editor{
+    height: 120px !important;
+    max-height: 120px !important;
+  }
+</style>
+
+
+<style id="notes-modal-real-fix">
+/* Make notes modal (set-modal) compact and prevent huge glass panel */
+.set-modal{
+  max-height: 72vh !important;
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.set-modal-inner{
+  flex: 1 1 auto !important;
+  overflow: auto !important;
+}
+.set-modal-actions{
+  flex: 0 0 auto !important;
+  padding-top: 10px !important;
+}
+.notes-textarea,
+.notes-editor{
+  height: 140px !important;
+  max-height: 140px !important;
+  min-height: 140px !important;
+  resize: none !important;
+  overflow-y: auto !important;
+}
+</style>
+
 </head>
 <body class="mode-light">
   </div>
@@ -1207,6 +1249,8 @@ button.secondary{
 /* Notes modal -&gt; dark */
 .notes-modal-overlay{ background: rgba(2,6,23,0.55); }
 .notes-modal{
+  max-height: 70vh !important;
+
   background: linear-gradient(180deg, rgba(15,23,42,0.92) 0%, rgba(2,6,23,0.88) 100%);
   border: 1px solid rgba(148,163,184,0.22);
   box-shadow:
@@ -1227,10 +1271,21 @@ button.secondary{
   color: rgba(255,79,191,0.95);
 }
 .notes-editor{
-  background: rgba(2,6,23,0.70);
-  border: 1px solid rgba(148,163,184,0.22);
-  color: rgba(229,231,235,0.95);
-  box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+  width: 100%;
+  height: 120px !important;
+  max-height: 120px !important;
+  overflow-y: auto !important;
+  border-radius: 18px;
+  padding: 10px 12px;
+  border: 1px solid rgba(17,24,39,0.16);
+  background: rgba(255,255,255,0.72);
+  color: rgba(17,24,39,0.92);
+  outline: none;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  box-shadow: 0 8px 18px rgba(17,24,39,0.06);
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 .notes-editor:empty::before{ color: rgba(148,163,184,0.55); }
 .notes-btn.secondary{
@@ -1397,18 +1452,18 @@ button.secondary{
 /* Rich notes editor (contenteditable) */
 .notes-editor{
   width: 100%;
-  min-height: 90px;
-  resize: vertical; /* no-op for div, but kept for consistency */
+  height: 120px !important;
+  max-height: 120px !important;
+  overflow-y: auto !important;
   border-radius: 18px;
-  padding: 12px 12px;
+  padding: 10px 12px;
   border: 1px solid rgba(17,24,39,0.16);
   background: rgba(255,255,255,0.72);
   color: rgba(17,24,39,0.92);
   outline: none;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   line-height: 1.35;
-  box-shadow: 0 10px 22px rgba(17,24,39,0.06);
-  overflow: auto;
+  box-shadow: 0 8px 18px rgba(17,24,39,0.06);
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -1747,12 +1802,12 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 0px !important;
   gap: 4px !important;
 }
 .filter-bar{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 2px !important;
 }
 
@@ -2086,10 +2141,21 @@ button.secondary,
   box-shadow: 0 10px 22px rgba(11,15,25,.08) !important;
 }
 .notes-editor{
-  background: rgba(255,255,255,.92) !important;
-  border: 1px solid rgba(11,15,25,.12) !important;
-  color: var(--text-main) !important;
-  box-shadow: none !important;
+  width: 100%;
+  height: 120px !important;
+  max-height: 120px !important;
+  overflow-y: auto !important;
+  border-radius: 18px;
+  padding: 10px 12px;
+  border: 1px solid rgba(17,24,39,0.16);
+  background: rgba(255,255,255,0.72);
+  color: rgba(17,24,39,0.92);
+  outline: none;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  box-shadow: 0 8px 18px rgba(17,24,39,0.06);
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 .notes-btn{
   background: linear-gradient(135deg, var(--pink-1), var(--pink-2)) !important;
@@ -2308,10 +2374,21 @@ header h1::after{
   flex-direction: column;
 }
 .notes-editor{
-  flex: 1;
-  min-height: 240px;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  height: 120px !important;
+  max-height: 120px !important;
+  overflow-y: auto !important;
+  border-radius: 18px;
+  padding: 10px 12px;
+  border: 1px solid rgba(17,24,39,0.16);
+  background: rgba(255,255,255,0.72);
+  color: rgba(17,24,39,0.92);
+  outline: none;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  box-shadow: 0 8px 18px rgba(17,24,39,0.06);
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 &lt;/style&gt;
@@ -2825,7 +2902,7 @@ header, header *{
 header{
   border: none !important;
   padding: 0 !important;
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 10px !important;
 }
 
@@ -3492,6 +3569,52 @@ header{
 &lt;/style&gt;
 
 &lt;style&gt;body{padding-top: calc(env(safe-area-inset-top, 0px) + 26px) !important;}&lt;/style&gt;
+
+&lt;style id=&quot;notes-modal-real-fix&quot;&gt;
+/* Compact notes modal (set-modal) and keep textarea fixed */
+.set-modal{max-height:72vh !important;height:auto !important;display:flex !important;flex-direction:column !important;}
+.set-modal-inner{flex:1 1 auto !important;overflow:auto !important;}
+.set-modal-actions{flex:0 0 auto !important;padding-top:10px !important;}
+.notes-textarea,.notes-editor{height:140px !important;max-height:140px !important;min-height:140px !important;resize:none !important;overflow-y:auto !important;}
+&lt;/style&gt;
+
+
+&lt;style id=&quot;notes-modal-final-size&quot;&gt;
+/* FINAL: notes modal should be compact (no huge glass sheet) */
+.notes-modal-overlay{
+  padding: 14px !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.notes-modal{
+  width: min(560px, calc(100vw - 28px)) !important;
+  height: auto !important;
+  max-height: 60vh !important;
+  overflow: hidden !important;
+}
+.notes-modal-inner{
+  padding: 14px 14px 12px !important;
+  max-height: 60vh !important;
+  overflow: auto !important;
+}
+.notes-modal-actions{
+  position: sticky !important;
+  bottom: 0 !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+  padding: 10px 0 0 !important;
+  background: transparent !important;
+}
+.notes-editor, .notes-textarea{
+  height: 140px !important;
+  max-height: 140px !important;
+  min-height: 140px !important;
+  resize: none !important;
+  overflow-y: auto !important;
+}
+&lt;/style&gt;
+
 &lt;/head&gt;
 
 &lt;body&gt;
@@ -5390,12 +5513,12 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 0px !important;
   gap: 4px !important;
 }
 .filter-bar{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 2px !important;
 }
 
@@ -5719,10 +5842,21 @@ button.secondary,
   box-shadow: 0 10px 22px rgba(11,15,25,.08) !important;
 }
 .notes-editor{
-  background: rgba(255,255,255,.92) !important;
-  border: 1px solid rgba(11,15,25,.12) !important;
-  color: var(--text-main) !important;
-  box-shadow: none !important;
+  width: 100%;
+  height: 120px !important;
+  max-height: 120px !important;
+  overflow-y: auto !important;
+  border-radius: 18px;
+  padding: 10px 12px;
+  border: 1px solid rgba(17,24,39,0.16);
+  background: rgba(255,255,255,0.72);
+  color: rgba(17,24,39,0.92);
+  outline: none;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  box-shadow: 0 8px 18px rgba(17,24,39,0.06);
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 .notes-btn{
   background: linear-gradient(135deg, var(--pink-1), var(--pink-2)) !important;
@@ -6272,12 +6406,12 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 0px !important;
   gap: 4px !important;
 }
 .filter-bar{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 2px !important;
 }
 
@@ -6601,10 +6735,21 @@ button.secondary,
   box-shadow: 0 10px 22px rgba(11,15,25,.08) !important;
 }
 .notes-editor{
-  background: rgba(255,255,255,.92) !important;
-  border: 1px solid rgba(11,15,25,.12) !important;
-  color: var(--text-main) !important;
-  box-shadow: none !important;
+  width: 100%;
+  height: 120px !important;
+  max-height: 120px !important;
+  overflow-y: auto !important;
+  border-radius: 18px;
+  padding: 10px 12px;
+  border: 1px solid rgba(17,24,39,0.16);
+  background: rgba(255,255,255,0.72);
+  color: rgba(17,24,39,0.92);
+  outline: none;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  box-shadow: 0 8px 18px rgba(17,24,39,0.06);
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 .notes-btn{
   background: linear-gradient(135deg, var(--pink-1), var(--pink-2)) !important;
@@ -6933,12 +7078,12 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 0px !important;
   gap: 4px !important;
 }
 .filter-bar{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 2px !important;
 }
 
@@ -7337,10 +7482,21 @@ button.secondary,
   box-shadow: 0 10px 22px rgba(11,15,25,.08) !important;
 }
 .notes-editor{
-  background: rgba(255,255,255,.92) !important;
-  border: 1px solid rgba(11,15,25,.12) !important;
-  color: var(--text-main) !important;
-  box-shadow: none !important;
+  width: 100%;
+  height: 120px !important;
+  max-height: 120px !important;
+  overflow-y: auto !important;
+  border-radius: 18px;
+  padding: 10px 12px;
+  border: 1px solid rgba(17,24,39,0.16);
+  background: rgba(255,255,255,0.72);
+  color: rgba(17,24,39,0.92);
+  outline: none;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  box-shadow: 0 8px 18px rgba(17,24,39,0.06);
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 .notes-btn{
   background: linear-gradient(135deg, var(--pink-1), var(--pink-2)) !important;
@@ -8148,10 +8304,21 @@ button.secondary{
   color: rgba(255,79,191,0.95);
 }
 .notes-editor{
-  background: rgba(2,6,23,0.70);
-  border: 1px solid rgba(148,163,184,0.22);
-  color: rgba(229,231,235,0.95);
-  box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+  width: 100%;
+  height: 120px !important;
+  max-height: 120px !important;
+  overflow-y: auto !important;
+  border-radius: 18px;
+  padding: 10px 12px;
+  border: 1px solid rgba(17,24,39,0.16);
+  background: rgba(255,255,255,0.72);
+  color: rgba(17,24,39,0.92);
+  outline: none;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  box-shadow: 0 8px 18px rgba(17,24,39,0.06);
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 .notes-editor:empty::before{ color: rgba(148,163,184,0.55); }
 .notes-btn.secondary{
@@ -8318,18 +8485,18 @@ button.secondary{
 /* Rich notes editor (contenteditable) */
 .notes-editor{
   width: 100%;
-  min-height: 90px;
-  resize: vertical; /* no-op for div, but kept for consistency */
+  height: 120px !important;
+  max-height: 120px !important;
+  overflow-y: auto !important;
   border-radius: 18px;
-  padding: 12px 12px;
+  padding: 10px 12px;
   border: 1px solid rgba(17,24,39,0.16);
   background: rgba(255,255,255,0.72);
   color: rgba(17,24,39,0.92);
   outline: none;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   line-height: 1.35;
-  box-shadow: 0 10px 22px rgba(17,24,39,0.06);
-  overflow: auto;
+  box-shadow: 0 8px 18px rgba(17,24,39,0.06);
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -8668,12 +8835,12 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 0px !important;
   gap: 4px !important;
 }
 .filter-bar{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 2px !important;
 }
 
@@ -8823,14 +8990,71 @@ header{
   flex-direction: column;
 }
 .notes-editor{
-  flex: 1;
-  min-height: 240px;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  height: 120px !important;
+  max-height: 120px !important;
+  overflow-y: auto !important;
+  border-radius: 18px;
+  padding: 10px 12px;
+  border: 1px solid rgba(17,24,39,0.16);
+  background: rgba(255,255,255,0.72);
+  color: rgba(17,24,39,0.92);
+  outline: none;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  box-shadow: 0 8px 18px rgba(17,24,39,0.06);
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 &lt;/style&gt;
 &lt;style&gt;body{padding-top: calc(env(safe-area-inset-top, 0px) + 26px) !important;}&lt;/style&gt;
+
+&lt;style id=&quot;notes-modal-real-fix&quot;&gt;
+/* Compact notes modal (set-modal) and keep textarea fixed */
+.set-modal{max-height:72vh !important;height:auto !important;display:flex !important;flex-direction:column !important;}
+.set-modal-inner{flex:1 1 auto !important;overflow:auto !important;}
+.set-modal-actions{flex:0 0 auto !important;padding-top:10px !important;}
+.notes-textarea,.notes-editor{height:140px !important;max-height:140px !important;min-height:140px !important;resize:none !important;overflow-y:auto !important;}
+&lt;/style&gt;
+
+
+&lt;style id=&quot;notes-modal-final-size&quot;&gt;
+/* FINAL: notes modal should be compact (no huge glass sheet) */
+.notes-modal-overlay{
+  padding: 14px !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.notes-modal{
+  width: min(560px, calc(100vw - 28px)) !important;
+  height: auto !important;
+  max-height: 60vh !important;
+  overflow: hidden !important;
+}
+.notes-modal-inner{
+  padding: 14px 14px 12px !important;
+  max-height: 60vh !important;
+  overflow: auto !important;
+}
+.notes-modal-actions{
+  position: sticky !important;
+  bottom: 0 !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+  padding: 10px 0 0 !important;
+  background: transparent !important;
+}
+.notes-editor, .notes-textarea{
+  height: 140px !important;
+  max-height: 140px !important;
+  min-height: 140px !important;
+  resize: none !important;
+  overflow-y: auto !important;
+}
+&lt;/style&gt;
+
 &lt;/head&gt;
 &lt;body&gt;
 &lt;header&gt;
@@ -10359,12 +10583,12 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 0px !important;
   gap: 4px !important;
 }
 .filter-bar{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 2px !important;
 }
 
@@ -10834,12 +11058,12 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 0px !important;
   gap: 4px !important;
 }
 .filter-bar{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 2px !important;
 }
 
@@ -11088,12 +11312,12 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 0px !important;
   gap: 4px !important;
 }
 .filter-bar{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 2px !important;
 }
 
@@ -11887,10 +12111,21 @@ button.secondary{
   color: rgba(123,92,255,0.95);
 }
 .notes-editor{
-  background: rgba(2,6,23,0.70);
-  border: 1px solid rgba(148,163,184,0.22);
-  color: rgba(229,231,235,0.95);
-  box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+  width: 100%;
+  height: 120px !important;
+  max-height: 120px !important;
+  overflow-y: auto !important;
+  border-radius: 18px;
+  padding: 10px 12px;
+  border: 1px solid rgba(17,24,39,0.16);
+  background: rgba(255,255,255,0.72);
+  color: rgba(17,24,39,0.92);
+  outline: none;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  box-shadow: 0 8px 18px rgba(17,24,39,0.06);
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 .notes-editor:empty::before{ color: rgba(148,163,184,0.55); }
 .notes-btn.secondary{
@@ -12057,18 +12292,18 @@ button.secondary{
 /* Rich notes editor (contenteditable) */
 .notes-editor{
   width: 100%;
-  min-height: 90px;
-  resize: vertical; /* no-op for div, but kept for consistency */
+  height: 120px !important;
+  max-height: 120px !important;
+  overflow-y: auto !important;
   border-radius: 18px;
-  padding: 12px 12px;
+  padding: 10px 12px;
   border: 1px solid rgba(17,24,39,0.16);
   background: rgba(255,255,255,0.72);
   color: rgba(17,24,39,0.92);
   outline: none;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   line-height: 1.35;
-  box-shadow: 0 10px 22px rgba(17,24,39,0.06);
-  overflow: auto;
+  box-shadow: 0 8px 18px rgba(17,24,39,0.06);
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -12407,12 +12642,12 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 0px !important;
   gap: 4px !important;
 }
 .filter-bar{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 2px !important;
 }
 
@@ -12562,14 +12797,71 @@ header{
   flex-direction: column;
 }
 .notes-editor{
-  flex: 1;
-  min-height: 240px;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  height: 120px !important;
+  max-height: 120px !important;
+  overflow-y: auto !important;
+  border-radius: 18px;
+  padding: 10px 12px;
+  border: 1px solid rgba(17,24,39,0.16);
+  background: rgba(255,255,255,0.72);
+  color: rgba(17,24,39,0.92);
+  outline: none;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  box-shadow: 0 8px 18px rgba(17,24,39,0.06);
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 &lt;/style&gt;
 &lt;style&gt;body{padding-top: calc(env(safe-area-inset-top, 0px) + 26px) !important;}&lt;/style&gt;
+
+&lt;style id=&quot;notes-modal-real-fix&quot;&gt;
+/* Compact notes modal (set-modal) and keep textarea fixed */
+.set-modal{max-height:72vh !important;height:auto !important;display:flex !important;flex-direction:column !important;}
+.set-modal-inner{flex:1 1 auto !important;overflow:auto !important;}
+.set-modal-actions{flex:0 0 auto !important;padding-top:10px !important;}
+.notes-textarea,.notes-editor{height:140px !important;max-height:140px !important;min-height:140px !important;resize:none !important;overflow-y:auto !important;}
+&lt;/style&gt;
+
+
+&lt;style id=&quot;notes-modal-final-size&quot;&gt;
+/* FINAL: notes modal should be compact (no huge glass sheet) */
+.notes-modal-overlay{
+  padding: 14px !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.notes-modal{
+  width: min(560px, calc(100vw - 28px)) !important;
+  height: auto !important;
+  max-height: 60vh !important;
+  overflow: hidden !important;
+}
+.notes-modal-inner{
+  padding: 14px 14px 12px !important;
+  max-height: 60vh !important;
+  overflow: auto !important;
+}
+.notes-modal-actions{
+  position: sticky !important;
+  bottom: 0 !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+  padding: 10px 0 0 !important;
+  background: transparent !important;
+}
+.notes-editor, .notes-textarea{
+  height: 140px !important;
+  max-height: 140px !important;
+  min-height: 140px !important;
+  resize: none !important;
+  overflow-y: auto !important;
+}
+&lt;/style&gt;
+
 &lt;/head&gt;
 &lt;body&gt;
 &lt;header&gt;
@@ -14061,12 +14353,12 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 0px !important;
   gap: 4px !important;
 }
 .filter-bar{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 2px !important;
 }
 
@@ -14536,12 +14828,12 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 0px !important;
   gap: 4px !important;
 }
 .filter-bar{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 2px !important;
 }
 
@@ -14790,12 +15082,12 @@ button:focus-visible{
 
 /* tighten spacing between title and filter buttons */
 header{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 0px !important;
   gap: 4px !important;
 }
 .filter-bar{
-  margin-top: 2px !important;
+  margin-top: 0px !important;
   margin-bottom: 2px !important;
 }
 
