@@ -607,6 +607,19 @@ body.mode-dark .bottom-tabs #tab-aplus:not(.active) .ico{
 }
 </style>
 
+
+<style id="force-efficiency-neutral">
+/* FORCE efficiency tag to match neutral tag style */
+.tag-eff,
+.tag-efficiency,
+[data-tag="efficiency"],
+[data-tag="эффективность"]{
+  background: rgba(34,197,94,0.12) !important;
+  border-color: rgba(34,197,94,0.26) !important;
+  color: rgba(134,239,172,0.95) !important;
+}
+</style>
+
 </head>
 <body class="mode-light">
   </div>
@@ -615,6 +628,7 @@ body.mode-dark .bottom-tabs #tab-aplus:not(.active) .ico{
 
 &lt;html lang=&quot;ru&quot;&gt;
 &lt;head&gt;
+&lt;style id=&quot;mobile-deadline-safe&quot;&gt;body{padding-bottom:calc(env(safe-area-inset-bottom, 0px) + 72px) !important;} .deadline-plain{margin-bottom:10px !important;}&lt;/style&gt;
 &lt;meta charset=&quot;utf-8&quot;/&gt;
 &lt;title&gt;Проект: новая реальность&lt;/title&gt;
 &lt;meta content=&quot;width=device-width, initial-scale=1.0&quot; name=&quot;viewport&quot;/&gt;
@@ -3477,6 +3491,7 @@ header{
 }
 &lt;/style&gt;
 
+&lt;style&gt;body{padding-top: calc(env(safe-area-inset-top, 0px) + 26px) !important;}&lt;/style&gt;
 &lt;/head&gt;
 
 &lt;body&gt;
@@ -3488,6 +3503,7 @@ header{
 &lt;div class=&quot;filter-bar&quot;&gt;
 &lt;button class=&quot;filter-btn active&quot; data-filter=&quot;all&quot;&gt;Все&lt;/button&gt;
 &lt;button class=&quot;filter-btn&quot; data-filter=&quot;inprogress&quot;&gt;В процессе&lt;/button&gt;
+&lt;button class=&quot;filter-btn&quot; data-filter=&quot;done&quot;&gt;Сделано&lt;/button&gt;
 &lt;button class=&quot;filter-btn&quot; data-filter=&quot;money&quot;&gt;Деньги&lt;/button&gt;
 &lt;button class=&quot;filter-btn&quot; data-filter=&quot;sense&quot;&gt;Sense&lt;/button&gt;
 &lt;button class=&quot;filter-btn&quot; data-filter=&quot;social&quot;&gt;Соцсети&lt;/button&gt;
@@ -5121,6 +5137,13 @@ function setupDailyCheckpoints() {
     return s === &#x27;1&#x27;; // ∞
   }
 
+  function isDone(card){
+    const btn = card.querySelector(&#x27;.daily-check&#x27;);
+    if(!btn) return false;
+    const s = String(btn.getAttribute(&#x27;data-state&#x27;) || &#x27;0&#x27;);
+    return s === &#x27;2&#x27;; // ✓
+  }
+
   function applyFilter(filter){
     activeFilter = filter;
 
@@ -5134,6 +5157,12 @@ function setupDailyCheckpoints() {
 
       if (filter === &#x27;inprogress&#x27;){
         if (isInProgress(card)) card.classList.remove(&#x27;hidden&#x27;);
+        else card.classList.add(&#x27;hidden&#x27;);
+        return;
+      }
+
+      if (filter === &#x27;done&#x27;){
+        if (isDone(card)) card.classList.remove(&#x27;hidden&#x27;);
         else card.classList.add(&#x27;hidden&#x27;);
         return;
       }
@@ -5158,6 +5187,7 @@ function setupDailyCheckpoints() {
     dc.addEventListener(&#x27;click&#x27;, () =&gt; {
       setTimeout(() =&gt; {
         if (activeFilter === &#x27;inprogress&#x27;) applyFilter(&#x27;inprogress&#x27;);
+        if (activeFilter === &#x27;done&#x27;) applyFilter(&#x27;done&#x27;);
       }, 0);
     });
   });
@@ -7525,6 +7555,7 @@ header h1::after{
 
 &lt;html lang=&quot;ru&quot;&gt;
 &lt;head&gt;
+&lt;style id=&quot;mobile-deadline-safe&quot;&gt;body{padding-bottom:calc(env(safe-area-inset-bottom, 0px) + 72px) !important;} .deadline-plain{margin-bottom:10px !important;}&lt;/style&gt;
 &lt;meta charset=&quot;utf-8&quot;/&gt;
 &lt;title&gt;Год, который изменит все&lt;/title&gt;
 &lt;meta content=&quot;width=device-width, initial-scale=1.0&quot; name=&quot;viewport&quot;/&gt;
@@ -7930,9 +7961,7 @@ header h1::after{
     .tag-buy { background: rgba(96,165,250,0.18); color:#bfdbfe; border-color: rgba(96,165,250,0.45);} 
     .tag-body { background: rgba(168,85,247,0.18); color:#d8b4fe; border-color: rgba(168,85,247,0.45);} 
     .tag-dev { background: rgba(253,224,71,0.18); color:#fde68a; border-color: rgba(253,224,71,0.45);} 
-
-
-.filter-bar {
+.tag-eff { background: rgba(255,255,255,0.08); color: rgba(229,231,235,0.85); border-color: rgba(255,255,255,0.18);} .filter-bar {
   display:flex;
   flex-wrap:wrap;
   gap:8px;
@@ -8082,8 +8111,7 @@ button.secondary{
 .tag-money{ background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.26); color: rgba(134,239,172,0.95); }
 .tag-body{ background: rgba(168,85,247,0.12); border-color: rgba(168,85,247,0.26); color: rgba(216,180,254,0.95); }
 .tag-dev{ background: rgba(96,165,250,0.12); border-color: rgba(96,165,250,0.26); color: rgba(191,219,254,0.95); }
-
-/* Filter chips */
+.tag-eff { background: rgba(255,255,255,0.08); color: rgba(229,231,235,0.85); border-color: rgba(255,255,255,0.18);} /* Filter chips */
 .filter-btn{
   background: rgba(2,6,23,0.70);
   border: 1px solid rgba(148,163,184,0.22);
@@ -8802,6 +8830,7 @@ header{
 }
 
 &lt;/style&gt;
+&lt;style&gt;body{padding-top: calc(env(safe-area-inset-top, 0px) + 26px) !important;}&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 &lt;header&gt;
@@ -8810,7 +8839,9 @@ header{
 &lt;div class=&quot;filter-bar&quot;&gt;
 &lt;button class=&quot;filter-btn active&quot; data-filter=&quot;all&quot;&gt;Все&lt;/button&gt;
 &lt;button class=&quot;filter-btn&quot; data-filter=&quot;inprogress&quot;&gt;В процессе&lt;/button&gt;
+&lt;button class=&quot;filter-btn&quot; data-filter=&quot;done&quot;&gt;Сделано&lt;/button&gt;
 &lt;button class=&quot;filter-btn&quot; data-filter=&quot;money&quot;&gt;Деньги&lt;/button&gt;
+&lt;button class=&quot;filter-btn&quot; data-filter=&quot;eff&quot;&gt;эффективность&lt;/button&gt;
 
 &lt;button class=&quot;filter-btn&quot; data-filter=&quot;body&quot;&gt;Тело&lt;/button&gt;
 &lt;button class=&quot;filter-btn&quot; data-filter=&quot;dev&quot;&gt;Развитие&lt;/button&gt;
@@ -8833,10 +8864,10 @@ header{
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div class=&quot;card&quot; data-goal=&quot;work_hours&quot; data-sphere=&quot;money&quot;&gt;
+&lt;div class=&quot;card&quot; data-goal=&quot;work_hours&quot; data-sphere=&quot;eff&quot;&gt;
 &lt;div class=&quot;card-inner&quot;&gt;
 &lt;div class=&quot;card-header&quot;&gt;
-&lt;div class=&quot;card-title&quot;&gt;Часы работы&lt;span class=&quot;goal-tag tag-money&quot;&gt;деньги&lt;/span&gt;&lt;/div&gt;
+&lt;div class=&quot;card-title&quot;&gt;Часы работы&lt;span class=&quot;goal-tag tag-eff&quot;&gt;эффективность&lt;/span&gt;&lt;/div&gt;
 &lt;button class=&quot;daily-check&quot; title=&quot;Отметить, что сегодня работала над этой целью&quot; type=&quot;button&quot;&gt;
 &lt;span class=&quot;daily-check-circle&quot;&gt;&lt;/span&gt;
 &lt;/button&gt;
@@ -9180,8 +9211,8 @@ header{
       setTimeout(function(){
   // Remove Sense section (filter + cards)
   try{
-    document.querySelectorAll(&#x27;.filter-btn[data-filter=&quot;sense&quot;]&#x27;).forEach(function(el){ if(el && el.parentNode) el.parentNode.removeChild(el); });
-    document.querySelectorAll(&#x27;.card[data-sphere=&quot;sense&quot;]&#x27;).forEach(function(el){ if(el && el.parentNode) el.parentNode.removeChild(el); });
+    document.querySelectorAll(&#x27;.filter-btn[data-filter=&quot;sense&quot;]&#x27;).forEach(function(el){ if(el &amp;&amp; el.parentNode) el.parentNode.removeChild(el); });
+    document.querySelectorAll(&#x27;.card[data-sphere=&quot;sense&quot;]&#x27;).forEach(function(el){ if(el &amp;&amp; el.parentNode) el.parentNode.removeChild(el); });
   }catch(e){}
         setInputEl.focus();
         setInputEl.select();
@@ -10115,6 +10146,13 @@ function setupDailyCheckpoints() {
     return s === &#x27;1&#x27;; // ∞
   }
 
+  function isDone(card){
+    const btn = card.querySelector(&#x27;.daily-check&#x27;);
+    if(!btn) return false;
+    const s = String(btn.getAttribute(&#x27;data-state&#x27;) || &#x27;0&#x27;);
+    return s === &#x27;2&#x27;; // ✓
+  }
+
   function applyFilter(filter){
     activeFilter = filter;
 
@@ -10128,6 +10166,12 @@ function setupDailyCheckpoints() {
 
       if (filter === &#x27;inprogress&#x27;){
         if (isInProgress(card)) card.classList.remove(&#x27;hidden&#x27;);
+        else card.classList.add(&#x27;hidden&#x27;);
+        return;
+      }
+
+      if (filter === &#x27;done&#x27;){
+        if (isDone(card)) card.classList.remove(&#x27;hidden&#x27;);
         else card.classList.add(&#x27;hidden&#x27;);
         return;
       }
@@ -10152,6 +10196,7 @@ function setupDailyCheckpoints() {
     dc.addEventListener(&#x27;click&#x27;, () =&gt; {
       setTimeout(() =&gt; {
         if (activeFilter === &#x27;inprogress&#x27;) applyFilter(&#x27;inprogress&#x27;);
+        if (activeFilter === &#x27;done&#x27;) applyFilter(&#x27;done&#x27;);
       }, 0);
     });
   });
@@ -11246,6 +11291,7 @@ header{
 
 &lt;html lang=&quot;ru&quot;&gt;
 &lt;head&gt;
+&lt;style id=&quot;mobile-deadline-safe&quot;&gt;body{padding-bottom:calc(env(safe-area-inset-bottom, 0px) + 72px) !important;} .deadline-plain{margin-bottom:10px !important;}&lt;/style&gt;
 &lt;meta charset=&quot;utf-8&quot;/&gt;
 &lt;title&gt;Руководитель уровня А+&lt;/title&gt;
 &lt;meta content=&quot;width=device-width, initial-scale=1.0&quot; name=&quot;viewport&quot;/&gt;
@@ -12523,12 +12569,14 @@ header{
 }
 
 &lt;/style&gt;
+&lt;style&gt;body{padding-top: calc(env(safe-area-inset-top, 0px) + 26px) !important;}&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 &lt;header&gt;
 &lt;h1&gt;Руководитель уровня А+&lt;/h1&gt;
 &lt;/header&gt;
-&lt;div class=&quot;filter-bar&quot;&gt;&lt;button class=&quot;filter-btn active&quot; data-filter=&quot;all&quot;&gt;Все&lt;/button&gt;&lt;button class=&quot;filter-btn&quot; data-filter=&quot;inprogress&quot;&gt;В процессе&lt;/button&gt;&lt;button class=&quot;filter-btn&quot; data-filter=&quot;money&quot;&gt;Деньги&lt;/button&gt;&lt;button class=&quot;filter-btn&quot; data-filter=&quot;system&quot;&gt;Система&lt;/button&gt;&lt;button class=&quot;filter-btn&quot; data-filter=&quot;hire&quot;&gt;Найм&lt;/button&gt;&lt;button class=&quot;filter-btn&quot; data-filter=&quot;sense&quot;&gt;Sense&lt;/button&gt;&lt;button class=&quot;filter-btn&quot; data-filter=&quot;dev&quot;&gt;Развитие&lt;/button&gt;&lt;/div&gt;
+&lt;div class=&quot;filter-bar&quot;&gt;&lt;button class=&quot;filter-btn active&quot; data-filter=&quot;all&quot;&gt;Все&lt;/button&gt;&lt;button class=&quot;filter-btn&quot; data-filter=&quot;inprogress&quot;&gt;В процессе&lt;/button&gt;
+&lt;button class=&quot;filter-btn&quot; data-filter=&quot;done&quot;&gt;Сделано&lt;/button&gt;&lt;button class=&quot;filter-btn&quot; data-filter=&quot;money&quot;&gt;Деньги&lt;/button&gt;&lt;button class=&quot;filter-btn&quot; data-filter=&quot;system&quot;&gt;Система&lt;/button&gt;&lt;button class=&quot;filter-btn&quot; data-filter=&quot;hire&quot;&gt;Найм&lt;/button&gt;&lt;button class=&quot;filter-btn&quot; data-filter=&quot;sense&quot;&gt;Sense&lt;/button&gt;&lt;button class=&quot;filter-btn&quot; data-filter=&quot;dev&quot;&gt;Развитие&lt;/button&gt;&lt;/div&gt;
 &lt;div class=&quot;grid&quot;&gt;&lt;div class=&quot;card card-total&quot; data-goal=&quot;total&quot;&gt;
 &lt;div class=&quot;card-inner&quot;&gt;
 &lt;div class=&quot;progress-wrap&quot;&gt;
@@ -13800,6 +13848,13 @@ function setupDailyCheckpoints() {
     return s === &#x27;1&#x27;; // ∞
   }
 
+  function isDone(card){
+    const btn = card.querySelector(&#x27;.daily-check&#x27;);
+    if(!btn) return false;
+    const s = String(btn.getAttribute(&#x27;data-state&#x27;) || &#x27;0&#x27;);
+    return s === &#x27;2&#x27;; // ✓
+  }
+
   function applyFilter(filter){
     activeFilter = filter;
 
@@ -13813,6 +13868,12 @@ function setupDailyCheckpoints() {
 
       if (filter === &#x27;inprogress&#x27;){
         if (isInProgress(card)) card.classList.remove(&#x27;hidden&#x27;);
+        else card.classList.add(&#x27;hidden&#x27;);
+        return;
+      }
+
+      if (filter === &#x27;done&#x27;){
+        if (isDone(card)) card.classList.remove(&#x27;hidden&#x27;);
         else card.classList.add(&#x27;hidden&#x27;);
         return;
       }
@@ -13837,6 +13898,7 @@ function setupDailyCheckpoints() {
     dc.addEventListener(&#x27;click&#x27;, () =&gt; {
       setTimeout(() =&gt; {
         if (activeFilter === &#x27;inprogress&#x27;) applyFilter(&#x27;inprogress&#x27;);
+        if (activeFilter === &#x27;done&#x27;) applyFilter(&#x27;done&#x27;);
       }, 0);
     });
   });
